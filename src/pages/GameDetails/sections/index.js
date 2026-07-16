@@ -1,0 +1,11 @@
+export { DetailHero } from './DetailHero';
+export { QuickInfo } from './QuickInfo';
+export { TrailerSection } from './TrailerSection';
+export { GallerySection } from './GallerySection';
+export { AboutSection } from './AboutSection';
+export { RequirementsSection } from './RequirementsSection';
+export { SimilarGames } from './SimilarGames';
+export { ReviewsSection } from './ReviewsSection';
+export { CommentsSection } from './CommentsSection';
+export { AchievementsSection } from './AchievementsSection';
+export { PlayCtaSection } from './PlayCtaSection';

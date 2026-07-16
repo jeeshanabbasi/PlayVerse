@@ -1,0 +1,1 @@
+export { ComingSoonCard } from './ComingSoonCard';

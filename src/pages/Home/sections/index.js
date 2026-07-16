@@ -1,0 +1,12 @@
+export { HeroSection } from './HeroSection';
+export { FeaturedSection } from './FeaturedSection';
+export { TrendingSection } from './TrendingSection';
+export { ContinuePlayingSection } from './ContinuePlayingSection';
+export { CategoriesSection } from './CategoriesSection';
+export { TopRatedSection } from './TopRatedSection';
+export { NewReleasesSection } from './NewReleasesSection';
+export { ComingSoonSection } from './ComingSoonSection';
+export { RecommendedSection } from './RecommendedSection';
+export { CommunitySection } from './CommunitySection';
+export { NewsSection } from './NewsSection';
+export { NewsletterSection } from './NewsletterSection';

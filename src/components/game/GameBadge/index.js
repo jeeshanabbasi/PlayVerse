@@ -1,0 +1,1 @@
+export { GameBadge } from './GameBadge';
