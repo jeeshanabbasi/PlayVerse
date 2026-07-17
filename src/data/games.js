@@ -150,7 +150,44 @@ export const STATUS_FILTER_OPTIONS = [
   { value: 'beta', label: 'Beta' },
 ];
 
-export const gamesCatalog = Array.from({ length: 120 }, (_, i) => buildGame(i));
+export const gamesCatalog = [
+  {
+    id: 'snake',
+    title: 'Snake',
+    image: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=800&q=80',
+    genres: ['Arcade', 'Retro'],
+    platforms: ['web', 'mobile'],
+    difficulty: 'Medium',
+    rating: 4.9,
+    plays: 3500000,
+    price: 0,
+    status: 'released',
+    releasedAt: Date.UTC(2026, 0, 1),
+    playTime: 'infinite',
+    isNew: true,
+    isTrending: true,
+    isFeatured: true,
+  },
+  {
+    id: 'tic-tac-toe',
+    title: 'Tic Tac Toe',
+    image: 'https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?auto=format&fit=crop&w=800&q=80',
+    genres: ['Strategy', 'Puzzle'],
+    platforms: ['web', 'mobile'],
+    difficulty: 'Medium',
+    rating: 4.7,
+    plays: 1200000,
+    price: 0,
+    status: 'released',
+    releasedAt: Date.UTC(2026, 0, 1),
+    playTime: 'quick',
+    isNew: true,
+    isTrending: true,
+    isFeatured: true,
+  },
+  ...Array.from({ length: 120 }, (_, i) => buildGame(i)),
+];
+
 
 export const recentlyPlayedGames = [
   {
