@@ -1,15 +1,9 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Container, Section } from '@components/layout';
+import { Container } from '@components/layout';
 import { pageFade } from '@utils/index';
 import { useGamesExplorer } from '@hooks/index';
-import {
-  GamesHero,
-  GamesFilters,
-  TrendingRow,
-  RecentlyPlayedRow,
-  GamesGrid,
-} from './sections';
+import { GamesHero, GamesFilters, GamesGrid } from './sections';
 
 function GamesPageComponent() {
   const {
@@ -17,13 +11,12 @@ function GamesPageComponent() {
     setQuery,
     filters,
     setFilter,
-    setQuick,
-    clearFilters,
     results,
     total,
     matching,
     isLoading,
     hasActiveFilters,
+    clearFilters,
   } = useGamesExplorer();
 
   return (
@@ -34,45 +27,35 @@ function GamesPageComponent() {
       transition={pageFade.transition}
       className="pb-16"
     >
-      <Container className="pt-8 md:pt-12 space-y-10 md:space-y-12">
+      <Container className="pt-8 md:pt-12 space-y-8 md:space-y-12">
+        {/* GamesHero handles only page title & search input */}
         <GamesHero
           query={query}
           onQueryChange={setQuery}
           onClear={() => setQuery('')}
-          quick={filters.quick}
-          onQuickChange={setQuick}
           matching={matching}
           total={total}
         />
 
+        {/* GamesFilters handles only genre chips */}
         <GamesFilters
-          filters={filters}
-          onFilterChange={setFilter}
-          onClear={clearFilters}
-          hasActiveFilters={hasActiveFilters}
+          genre={filters.genre}
+          onGenreChange={(val) => setFilter('genre', val)}
         />
+
+        {/* GamesGrid handles the simplified 12 classics grid */}
+        <div className="pt-2 md:pt-4">
+          <GamesGrid
+            games={results}
+            isLoading={isLoading}
+            hasActiveFilters={hasActiveFilters}
+            onClearFilters={clearFilters}
+          />
+        </div>
       </Container>
-
-      <TrendingRow />
-      <RecentlyPlayedRow />
-
-      <Section
-        title="All Games"
-        description="Browse the full PlayVerse catalog."
-        spacing="md"
-      >
-        <GamesGrid
-          games={results}
-          isLoading={isLoading}
-          hasActiveFilters={hasActiveFilters}
-          onClearFilters={clearFilters}
-        />
-      </Section>
     </motion.div>
   );
 }
 
-const GamesPage = memo(GamesPageComponent);
-
+export const GamesPage = memo(GamesPageComponent);
 export default GamesPage;
-export { GamesPage };

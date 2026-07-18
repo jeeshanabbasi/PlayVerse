@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, Search, Bell, User } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
 import { NavList } from '@components/layout/Navigation';
@@ -18,44 +18,18 @@ export function Header() {
 
           <NavList
             items={NAV_ITEMS}
-            className="hidden lg:flex"
+            className="hidden md:flex"
           />
 
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              className="btn-ghost p-2.5"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
-
-            <button
-              type="button"
-              className="btn-ghost p-2.5 hidden sm:inline-flex"
-              aria-label="Notifications"
-            >
-              <Bell className="w-5 h-5" />
-            </button>
-
-            <button
-              type="button"
-              className="btn-ghost p-2.5 hidden sm:inline-flex"
-              aria-label="Profile"
-            >
-              <User className="w-5 h-5" />
-            </button>
-
-            <button
-              type="button"
-              className="btn-ghost p-2.5 lg:hidden"
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen((prev) => !prev)}
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          <button
+            type="button"
+            className="btn-ghost p-2.5 md:hidden"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
@@ -65,8 +39,8 @@ export function Header() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-            className="lg:hidden overflow-hidden border-t border-border"
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="md:hidden overflow-hidden border-t border-border bg-background"
           >
             <div className="container-app py-4">
               <NavList

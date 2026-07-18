@@ -16,6 +16,7 @@ export async function createGameEngine({
   if (!parent) {
     throw new Error('createGameEngine requires a parent element');
   }
+  parent.innerHTML = '';
   if (!definition) {
     throw new Error('createGameEngine requires a game definition');
   }

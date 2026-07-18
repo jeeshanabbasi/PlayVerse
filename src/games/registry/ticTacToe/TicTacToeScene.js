@@ -110,6 +110,18 @@ export function createTicTacToeScene(Phaser) {
         loop: true,
       });
 
+      // Listen for click/touch inputs on board cells
+      this.input.on('pointerdown', (pointer) => {
+        if (this.state !== 'PLAYING') return;
+        const isHumanTurn = this.stateManager.getCurrentTurn() === 'X';
+        if (!isHumanTurn) return;
+
+        const clickedIndex = this.inputManager.resolveCoordinates(pointer.x, pointer.y);
+        if (clickedIndex !== -1) {
+          this.handlePlayerMove(clickedIndex);
+        }
+      });
+
       // Listen for Phaser cleanups
       this.events.once('shutdown', () => this.handleCleanup());
       this.events.once('destroy', () => this.handleCleanup());
@@ -127,16 +139,8 @@ export function createTicTacToeScene(Phaser) {
         // 1. Accessibility keyboard update
         this.inputManager.update((cellIndex) => this.handlePlayerMove(cellIndex));
 
-        // 2. Mouse/Pointer selection
-        const pointer = this.input.activePointer;
-        if (pointer.justDown) {
-          const clickedIndex = this.inputManager.getPointerCell(pointer);
-          if (clickedIndex !== -1) {
-            this.handlePlayerMove(clickedIndex);
-          }
-        }
-
         // Draw selection cursor / hovers
+        const pointer = this.input.activePointer;
         const hoverIdx = this.inputManager.getHoverCell(pointer);
         const focusIdx = this.inputManager.getFocusedIndex();
         const isKb = this.inputManager.isKeyboardActive();

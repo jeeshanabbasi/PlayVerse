@@ -1,32 +1,26 @@
-import { Home, Gamepad2, Trophy, Users, Compass } from 'lucide-react';
+import { Home, Gamepad2, Info, Search } from 'lucide-react';
 
 export const NAV_ITEMS = [
   { id: 'home', label: 'Home', path: '/', icon: Home },
   { id: 'games', label: 'Games', path: '/games', icon: Gamepad2 },
-  { id: 'discover', label: 'Discover', path: '/discover', icon: Compass },
-  { id: 'leaderboard', label: 'Leaderboard', path: '/leaderboard', icon: Trophy },
-  { id: 'community', label: 'Community', path: '/community', icon: Users },
+  { id: 'search', label: 'Search', path: '/search', icon: Search },
+  { id: 'about', label: 'About', path: '/about', icon: Info },
 ];
 
 export const FOOTER_LINKS = {
   platform: [
     { label: 'Games', path: '/games' },
-    { label: 'Discover', path: '/discover' },
-    { label: 'Leaderboard', path: '/leaderboard' },
-    { label: 'Community', path: '/community' },
+    { label: 'About PlayVerse', path: '/about' },
   ],
   company: [
-    { label: 'About', path: '/about' },
-    { label: 'Careers', path: '/careers' },
-    { label: 'Press', path: '/press' },
-    { label: 'Contact', path: '/contact' },
+    { label: 'Platform Status', path: '/about' },
+    { label: 'Repository', path: '/about' },
   ],
   legal: [
-    { label: 'Privacy', path: '/privacy' },
-    { label: 'Terms', path: '/terms' },
-    { label: 'Cookies', path: '/cookies' },
+    { label: 'Privacy Policy', path: '/privacy' },
+    { label: 'Terms of Service', path: '/terms' },
   ],
 };
 
 export const APP_NAME = 'PlayVerse';
-export const APP_TAGLINE = 'Play without limits.';
+export const APP_TAGLINE = 'Polished browser games, instant play.';

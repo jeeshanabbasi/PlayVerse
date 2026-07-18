@@ -7,6 +7,8 @@ const HomePage = lazy(() => import('@pages/Home'));
 const GamesPage = lazy(() => import('@pages/Games'));
 const GameDetailsPage = lazy(() => import('@pages/GameDetails'));
 const PlayPage = lazy(() => import('@pages/Play'));
+const AboutPage = lazy(() => import('@pages/About'));
+const SearchPage = lazy(() => import('@pages/Search'));
 const NotFoundPage = lazy(() => import('@pages/NotFound'));
 
 function RouteFallback() {
@@ -48,12 +50,24 @@ export const router = createBrowserRouter([
         element: withSuspense(GamesPage),
       },
       {
+        path: 'discover',
+        element: withSuspense(GamesPage),
+      },
+      {
         path: 'game/:slug',
         element: withSuspense(GameDetailsPage),
       },
       {
         path: 'games/:slug',
         element: <GamesSlugRedirect />,
+      },
+      {
+        path: 'about',
+        element: withSuspense(AboutPage),
+      },
+      {
+        path: 'search',
+        element: withSuspense(SearchPage),
       },
       {
         path: '*',
