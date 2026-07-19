@@ -1,6 +1,6 @@
 import { createTwentyFortyEightScene } from './TwentyFortyEightScene.js';
 export const twentyFortyEightDefinition = {
-  id: 'twentyFortyEight',
+  id: '2048',
   name: '2048',
   description: 'Slide numbers to 2048.',
   achievements: [

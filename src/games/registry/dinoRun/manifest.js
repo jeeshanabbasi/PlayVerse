@@ -1,6 +1,6 @@
 import { createDinoRunScene } from './DinoRunScene.js';
 export const dinoRunDefinition = {
-  id: 'dinoRun',
+  id: 'dino-run',
   name: 'Dino Run',
   description: 'Jump over cacti.',
   achievements: [

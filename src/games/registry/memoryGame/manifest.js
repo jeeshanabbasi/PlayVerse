@@ -1,6 +1,6 @@
 import { createMemoryScene } from './MemoryScene.js';
 export const memoryGameDefinition = {
-  id: 'memoryGame',
+  id: 'memory-game',
   name: 'Memory Game',
   description: 'A classic 4x4 card matching memory game.',
   achievements: [

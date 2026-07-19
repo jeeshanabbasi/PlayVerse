@@ -1,6 +1,6 @@
 import { createSpaceShooterScene } from './SpaceShooterScene.js';
 export const spaceShooterDefinition = {
-  id: 'spaceShooter',
+  id: 'space-shooter',
   name: 'Space Shooter',
   description: 'Shoot asteroids.',
   achievements: [

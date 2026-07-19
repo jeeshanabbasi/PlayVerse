@@ -11,7 +11,6 @@ export function createSudokuScene(Phaser) {
     }
 
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.cameras.main.setBackgroundColor('#ffffff');
         

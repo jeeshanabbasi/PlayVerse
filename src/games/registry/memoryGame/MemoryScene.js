@@ -11,7 +11,6 @@ export function createMemoryScene(Phaser) {
     }
 
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.cameras.main.setBackgroundColor('#2d2d2d');
         const colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0xff8800];

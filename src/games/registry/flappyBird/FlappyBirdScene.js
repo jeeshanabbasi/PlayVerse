@@ -8,7 +8,6 @@ export function createFlappyBirdScene(Phaser) {
     }
 
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.cameras.main.setBackgroundColor('#70c5ce');
         

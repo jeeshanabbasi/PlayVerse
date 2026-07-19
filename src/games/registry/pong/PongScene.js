@@ -8,7 +8,6 @@ export function createPongScene(Phaser) {
     }
     
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.physics.world.setBoundsCollision(false, false, true, true);
         

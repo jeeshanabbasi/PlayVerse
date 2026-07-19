@@ -8,7 +8,6 @@ export function createBreakoutScene(Phaser) {
     }
 
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.physics.world.setBoundsCollision(true, true, true, false);
 

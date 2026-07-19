@@ -10,7 +10,6 @@ export function createTwentyFortyEightScene(Phaser) {
     }
 
     create() {
-        super.create();
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.cameras.main.setBackgroundColor('#bbada0');
         

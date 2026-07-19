@@ -1,6 +1,6 @@
 import { createFlappyBirdScene } from './FlappyBirdScene.js';
 export const flappyBirdDefinition = {
-  id: 'flappyBird',
+  id: 'flappy-bird',
   name: 'Flappy Bird',
   description: 'Fly between pipes.',
   achievements: [
