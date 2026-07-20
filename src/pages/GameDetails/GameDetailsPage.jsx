@@ -7,21 +7,15 @@ import { EmptyState } from '@ui';
 import {
   DetailHero,
   QuickInfo,
-  TrailerSection,
-  GallerySection,
   AboutSection,
-  RequirementsSection,
   SimilarGames,
-  ReviewsSection,
-  CommentsSection,
   AchievementsSection,
-  PlayCtaSection,
 } from './sections';
 
 function GameDetailsPageComponent() {
   const { slug } = useParams();
   const game = useMemo(() => getGameBySlug(slug), [slug]);
-  const similar = useMemo(() => (game ? getSimilarGames(game.slug, 10) : []), [game]);
+  const similar = useMemo(() => (game ? getSimilarGames(game.slug, 8) : []), [game]);
 
   if (!game) {
     return (
@@ -46,24 +40,19 @@ function GameDetailsPageComponent() {
       animate={pageFade.animate}
       exit={pageFade.exit}
       transition={pageFade.transition}
-      className="pb-8"
+      className="pb-16 space-y-16 md:space-y-24"
     >
       <DetailHero game={game} />
-      <QuickInfo game={game} />
-      <TrailerSection game={game} />
-      <GallerySection game={game} />
-      <AboutSection game={game} />
-      <RequirementsSection game={game} />
-      <SimilarGames games={similar} />
-      <ReviewsSection game={game} />
-      <CommentsSection game={game} />
-      <AchievementsSection game={game} />
-      <PlayCtaSection game={game} />
+      
+      <div className="container-app space-y-16 md:space-y-24">
+        <QuickInfo game={game} />
+        <AboutSection game={game} />
+        <AchievementsSection game={game} />
+        <SimilarGames games={similar} />
+      </div>
     </motion.div>
   );
 }
 
-const GameDetailsPage = memo(GameDetailsPageComponent);
-
+export const GameDetailsPage = memo(GameDetailsPageComponent);
 export default GameDetailsPage;
-export { GameDetailsPage };
