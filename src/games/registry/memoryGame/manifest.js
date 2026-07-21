@@ -13,8 +13,8 @@ export const memoryGameDefinition = {
     { action: 'Select Card', keys: 'Left Click / Tap' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Match all pairs.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '🧠' },
+    { id: 'first-win', name: 'First Win', description: 'Match all pairs.', icon: '🏆' }
   ],
   createScenes({ Phaser }) {
     return [createMemoryScene(Phaser)];

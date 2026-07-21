@@ -13,8 +13,8 @@ export const flappyBirdDefinition = {
     { action: 'Flap Wings', keys: 'Spacebar / Left Click' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Score 10 points.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '🐦' },
+    { id: 'first-win', name: 'First Win', description: 'Score 10 points.', icon: '🏅' }
   ],
   createScenes({ Phaser }) {
     return [createFlappyBirdScene(Phaser)];

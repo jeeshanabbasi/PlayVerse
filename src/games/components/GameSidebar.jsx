@@ -81,16 +81,24 @@ export const GameSidebar = memo(function GameSidebar({
             <li
               key={item.id}
               className={cn(
-                'rounded-lg border px-3 py-2',
+                'flex items-start gap-2.5 rounded-lg border px-3 py-2 transition-colors',
                 item.unlocked
                   ? 'border-primary/30 bg-primary/10'
                   : 'border-border bg-background/40 opacity-70',
               )}
             >
-              <p className="text-sm font-medium text-text">{item.name ?? item.id}</p>
-              {item.description && (
-                <p className="text-body-sm">{item.description}</p>
-              )}
+              <span
+                className="flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-lg bg-surface border border-border text-sm"
+                aria-hidden="true"
+              >
+                {item.icon ?? '🏆'}
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-text">{item.name ?? item.id}</p>
+                {item.description && (
+                  <p className="text-[11px] text-text-secondary mt-0.5">{item.description}</p>
+                )}
+              </div>
             </li>
           ))}
         </ul>

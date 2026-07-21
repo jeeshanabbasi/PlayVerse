@@ -16,8 +16,8 @@ export const tetrisDefinition = {
     { action: 'Soft Drop', keys: 'Arrow Down' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Clear 10 lines.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '🧱' },
+    { id: 'first-win', name: 'First Win', description: 'Clear 10 lines.', icon: '🏗️' }
   ],
   createScenes({ Phaser }) {
     return [createTetrisScene(Phaser)];

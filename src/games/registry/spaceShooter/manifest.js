@@ -15,8 +15,8 @@ export const spaceShooterDefinition = {
     { action: 'Fire Laser', keys: 'Spacebar' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Score 100 points.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '🚀' },
+    { id: 'first-win', name: 'First Win', description: 'Score 100 points.', icon: '☄️' }
   ],
   createScenes({ Phaser }) {
     return [createSpaceShooterScene(Phaser)];

@@ -14,8 +14,8 @@ export const sudokuDefinition = {
     { action: 'Input Number', keys: 'Keys 1 - 9' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Solve the board.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '🧩' },
+    { id: 'first-win', name: 'First Win', description: 'Solve the board.', icon: '🎓' }
   ],
   createScenes({ Phaser }) {
     return [createSudokuScene(Phaser)];

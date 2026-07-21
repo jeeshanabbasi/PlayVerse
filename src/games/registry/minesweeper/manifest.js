@@ -13,8 +13,8 @@ export const minesweeperDefinition = {
     { action: 'Reveal Cell', keys: 'Left Click / Tap' }
   ],
   achievements: [
-    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.' },
-    { id: 'first-win', name: 'First Win', description: 'Clear a board.' }
+    { id: 'play-10', name: 'Play 10 matches', description: 'Play 10 matches.', icon: '💣' },
+    { id: 'first-win', name: 'First Win', description: 'Clear a board.', icon: '🏆' }
   ],
   createScenes({ Phaser }) {
     return [createMinesweeperScene(Phaser)];
