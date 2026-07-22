@@ -35,7 +35,7 @@ function FooterColumn({ title, links }) {
         )}
       >
         {links.map(({ label, path }) => (
-          <li key={path}>
+          <li key={label}>
             <Link
               to={path}
               className="text-sm text-text-secondary hover:text-text transition-colors duration-200 block py-1"
@@ -74,7 +74,7 @@ export function Footer() {
             &copy; {year} {APP_NAME}. All rights reserved.
           </p>
           <p className="text-xs text-text-muted">
-            Built for gamers, by gamers.
+            Built by Jeeshan Abbasi.
           </p>
         </div>
       </div>

@@ -1,31 +1,37 @@
 import { NavLink } from 'react-router-dom';
-import { cn } from '@utils/index';
+import { motion } from 'framer-motion';
+import { cn, playUiTick, playUiClick } from '@utils/index';
 
-export function NavItem({ to, label, icon: Icon, onClick }) {
+export function NavItem({ to, label, icon: Icon, onClick, layoutId }) {
   return (
     <NavLink
       to={to}
-      onClick={onClick}
+      onClick={(e) => {
+        playUiClick();
+        if (onClick) onClick(e);
+      }}
+      onMouseEnter={playUiTick}
       className={({ isActive }) =>
         cn(
-          'relative inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-250',
+          'relative inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 z-10',
           isActive
-            ? 'text-text bg-surface-hover'
-            : 'text-text-secondary hover:text-text hover:bg-surface-hover/60',
+            ? 'text-text font-semibold'
+            : 'text-text-secondary hover:text-text',
         )
       }
       end={to === '/'}
     >
       {({ isActive }) => (
         <>
-          {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}
-          <span>{label}</span>
           {isActive && (
-            <span
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"
-              aria-hidden="true"
+            <motion.span
+              layoutId={layoutId}
+              className="absolute inset-0 rounded-xl bg-surface-hover border border-border/40 z-[-1] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             />
           )}
+          {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}
+          <span>{label}</span>
         </>
       )}
     </NavLink>
@@ -34,6 +40,7 @@ export function NavItem({ to, label, icon: Icon, onClick }) {
 
 export function NavList({ items, orientation = 'horizontal', onItemClick, className }) {
   const isVertical = orientation === 'vertical';
+  const layoutId = isVertical ? 'mobileActiveNav' : 'desktopActiveNav';
 
   return (
     <nav
@@ -51,6 +58,7 @@ export function NavList({ items, orientation = 'horizontal', onItemClick, classN
           label={label}
           icon={icon}
           onClick={onItemClick}
+          layoutId={layoutId}
         />
       ))}
     </nav>

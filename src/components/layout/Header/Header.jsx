@@ -7,7 +7,6 @@ import { NAV_ITEMS } from '@constants/navigation';
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-
   const closeMobile = () => setMobileOpen(false);
 
   return (
