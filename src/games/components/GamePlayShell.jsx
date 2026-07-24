@@ -74,6 +74,7 @@ export const GamePlayShell = memo(function GamePlayShell({
         isFullscreen={isFullscreen}
         showFps={settings.showFps}
         debug={settings.debug}
+        crt={settings.crt}
         fps={engine.fps}
         onExit={exit}
         onTogglePause={engine.togglePause}
@@ -95,6 +96,9 @@ export const GamePlayShell = memo(function GamePlayShell({
           setSettings({ debug: !settings.debug });
           engine.hardReload();
         }}
+        onToggleCrt={() => {
+          setSettings({ crt: !settings.crt });
+        }}
       />
 
       <div className="flex-1 container-app w-full py-4 md:py-6">
@@ -105,6 +109,7 @@ export const GamePlayShell = memo(function GamePlayShell({
               status={engine.status}
               error={engine.error}
               paused={engine.paused}
+              crt={settings.crt}
             />
             <TouchControls
               visible={settings.touchControls}

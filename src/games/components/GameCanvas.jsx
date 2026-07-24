@@ -8,6 +8,7 @@ export const GameCanvas = memo(function GameCanvas({
   status,
   error,
   paused,
+  crt,
   className,
 }) {
   return (
@@ -15,6 +16,7 @@ export const GameCanvas = memo(function GameCanvas({
       className={cn(
         'relative w-full overflow-hidden rounded-xl border border-border bg-black',
         'shadow-[var(--shadow-lift)] aspect-video',
+        crt && 'crt-effect crt-screen-flicker',
         className,
       )}
     >

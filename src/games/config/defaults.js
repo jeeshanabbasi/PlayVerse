@@ -27,4 +27,5 @@ export const DEFAULT_SETTINGS = Object.freeze({
   showFps: false,
   debug: false,
   touchControls: true,
+  crt: false,
 });

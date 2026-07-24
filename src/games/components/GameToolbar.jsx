@@ -10,6 +10,7 @@ import {
   VolumeX,
   Bug,
   Gauge,
+  Tv,
 } from 'lucide-react';
 import { IconButton } from '@ui';
 import { cn } from '@utils/index';
@@ -22,6 +23,7 @@ export const GameToolbar = memo(function GameToolbar({
   isFullscreen,
   showFps,
   debug,
+  crt,
   fps,
   onExit,
   onTogglePause,
@@ -31,6 +33,7 @@ export const GameToolbar = memo(function GameToolbar({
   onToggleFullscreen,
   onToggleFps,
   onToggleDebug,
+  onToggleCrt,
   className,
 }) {
   return (
@@ -108,6 +111,15 @@ export const GameToolbar = memo(function GameToolbar({
           aria-label={debug ? 'Disable debug' : 'Enable debug'}
           onClick={onToggleDebug}
           className={debug ? 'text-warning' : undefined}
+        />
+        <IconButton
+          variant="ghost"
+          size="sm"
+          icon={Tv}
+          aria-label={crt ? 'Disable CRT Filter' : 'Enable CRT Filter'}
+          onClick={onToggleCrt}
+          className={crt ? 'text-primary' : undefined}
+          title={crt ? 'Disable CRT Screen Mode' : 'Enable CRT Screen Mode'}
         />
         <IconButton
           variant="ghost"
