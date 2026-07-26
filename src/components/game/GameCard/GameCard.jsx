@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Info } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ function GameCardComponent({
 }) {
   const navigate = useNavigate();
   const slug = id;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleInfoClick = (e) => {
     e.preventDefault();
@@ -38,12 +39,22 @@ function GameCardComponent({
         className="relative block aspect-[16/10] overflow-hidden bg-surface-elevated"
       >
         {image ? (
-          <img
-            src={image}
-            alt={title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-103"
-            loading="lazy"
-          />
+          <>
+            {/* Shimmer skeleton */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-gradient-to-r from-surface-elevated via-surface-hover to-surface-elevated bg-[length:200%_100%] animate-shimmer" />
+            )}
+            <img
+              src={image}
+              alt={title}
+              onLoad={() => setImageLoaded(true)}
+              className={cn(
+                'h-full w-full object-cover transition-all duration-500 group-hover:scale-103',
+                imageLoaded ? 'opacity-100' : 'opacity-0 scale-95'
+              )}
+              loading="lazy"
+            />
+          </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-surface-elevated to-background" />
         )}
