@@ -14,6 +14,7 @@ export const GamePlayShell = memo(function GamePlayShell({
   slug,
   title,
   meta,
+  onExit,
   className,
 }) {
   const navigate = useNavigate();
@@ -38,8 +39,12 @@ export const GamePlayShell = memo(function GamePlayShell({
   });
 
   const exit = useCallback(() => {
+    if (onExit) {
+      onExit();
+      return;
+    }
     navigate(slug ? `/game/${slug}` : '/games');
-  }, [navigate, slug]);
+  }, [navigate, slug, onExit]);
 
   if (!slug) {
     return (

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Play, Info } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn, playUiTick, playUiClick } from '@utils/index';
+import { useQuickPlay } from '@context/index';
 
 function GameCardComponent({
   id,
@@ -14,12 +15,19 @@ function GameCardComponent({
   const navigate = useNavigate();
   const slug = id;
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { openGame } = useQuickPlay();
 
   const handleInfoClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
     playUiClick();
     navigate(`/game/${slug}`);
+  };
+
+  const handlePlayClick = (e) => {
+    e.preventDefault();
+    playUiClick();
+    openGame(slug);
   };
 
   return (
@@ -34,7 +42,7 @@ function GameCardComponent({
       {/* Thumbnail Container */}
       <Link
         to={`/play/${slug}`}
-        onClick={playUiClick}
+        onClick={handlePlayClick}
         onMouseEnter={playUiTick}
         className="relative block aspect-[16/10] overflow-hidden bg-surface-elevated"
       >
@@ -88,7 +96,7 @@ function GameCardComponent({
         {/* Apple-style primary play button */}
         <Link
           to={`/play/${slug}`}
-          onClick={playUiClick}
+          onClick={handlePlayClick}
           onMouseEnter={playUiTick}
           className="mt-auto inline-flex items-center justify-center gap-2 w-full py-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-xl transition-all duration-200"
         >

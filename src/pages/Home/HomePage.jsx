@@ -4,6 +4,7 @@ import { pageFade } from '@utils/index';
 import { HeroSection } from './sections/HeroSection';
 import { FeaturedSection } from './sections/FeaturedSection';
 import { ContinuePlayingSection } from './sections/ContinuePlayingSection';
+import { AchievementsHub } from '@components/game';
 
 function HomePageComponent() {
   return (
@@ -16,7 +17,8 @@ function HomePageComponent() {
     >
       <HeroSection />
       
-      <div className="container-app flex flex-col gap-16 md:gap-24">
+      <div className="container-app flex flex-col gap-12 md:gap-16">
+        <AchievementsHub />
         <FeaturedSection />
         <ContinuePlayingSection />
       </div>
