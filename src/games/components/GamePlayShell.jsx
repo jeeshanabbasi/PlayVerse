@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EmptyState } from '@ui';
 import { Link } from 'react-router-dom';
@@ -20,6 +20,21 @@ export const GamePlayShell = memo(function GamePlayShell({
   const navigate = useNavigate();
   const shellRef = useRef(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(shellRef);
+
+  useEffect(() => {
+    if (slug) {
+      try {
+        const raw = localStorage.getItem('playverse_history');
+        let history = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(history)) history = [];
+        history = history.filter((item) => item !== slug);
+        history.unshift(slug);
+        localStorage.setItem('playverse_history', JSON.stringify(history.slice(0, 4)));
+      } catch {
+        // fail silently
+      }
+    }
+  }, [slug]);
 
   const {
     storage,
