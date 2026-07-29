@@ -1,11 +1,25 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Medal, Trophy, Star, Gamepad2 } from 'lucide-react';
+import { Medal, Trophy, Star, Volume2, VolumeX } from 'lucide-react';
 import { gamesCatalog } from '@data/games';
 import { resolvePlayableDefinition } from '@games';
 import { CircularProgress } from '@ui';
+import { playUiClick, startAmbientSoundscape, stopAmbientSoundscape } from '@utils/index';
 
 function AchievementsHubComponent() {
+  const [ambience, setAmbience] = useState(false);
+
+  const toggleAmbience = () => {
+    playUiClick();
+    if (ambience) {
+      stopAmbientSoundscape();
+      setAmbience(false);
+    } else {
+      startAmbientSoundscape();
+      setAmbience(true);
+    }
+  };
+
   const stats = useMemo(() => {
     let total = 0;
     let unlocked = 0;
@@ -16,7 +30,6 @@ function AchievementsHubComponent() {
       const achievements = definition?.achievements ?? [];
       total += achievements.length;
 
-      // Load unlocked achievements from localStorage
       let stored = [];
       try {
         const raw = localStorage.getItem(`playverse.game.${game.id}.achievements`);
@@ -51,18 +64,30 @@ function AchievementsHubComponent() {
   if (stats.unlocked === 0) {
     return (
       <div className="rounded-2xl border border-border/80 bg-surface/40 p-6 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-[var(--shadow-soft)]">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 text-left">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/25 text-primary shadow-[var(--shadow-glow)]">
             <Trophy className="h-6 w-6" />
           </div>
-          <div className="space-y-1 text-left">
+          <div className="space-y-1">
             <h3 className="text-base font-semibold text-text">Achievements Profile</h3>
             <p className="text-xs text-text-secondary">
               Play classic games to unlock unique badges and complete your catalog.
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-4 shrink-0">
+          <button
+            onClick={toggleAmbience}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all duration-200 outline-none select-none ${
+              ambience
+                ? 'bg-primary/10 border-primary/30 text-primary shadow-[var(--shadow-glow)]'
+                : 'bg-surface border-border text-text-secondary hover:text-text'
+            }`}
+          >
+            {ambience ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            <span>80s Ambience</span>
+          </button>
+
           <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Progress</span>
           <div className="px-3.5 py-1 rounded-full bg-border/40 text-xs font-mono font-bold text-text-secondary border border-border/40">
             0 / {stats.total} Badges
@@ -76,14 +101,28 @@ function AchievementsHubComponent() {
     <div className="rounded-2xl border border-border/80 bg-surface/45 p-6 backdrop-blur-xl grid gap-6 md:grid-cols-12 shadow-[var(--shadow-soft)]">
       {/* Profile summary */}
       <div className="md:col-span-4 flex items-center justify-between gap-4 md:flex-col md:justify-center md:border-r md:border-border/60 md:pr-6">
-        <div className="space-y-2 text-left md:text-center">
-          <p className="text-[10px] uppercase font-bold tracking-widest text-primary flex items-center gap-1.5 md:justify-center">
-            <Star className="h-3 w-3 fill-current" /> Profile Stats
-          </p>
-          <h3 className="text-lg font-bold text-text">Platform Progress</h3>
-          <p className="text-xs text-text-secondary">
-            You unlocked {stats.unlocked} out of {stats.total} classic badges!
-          </p>
+        <div className="space-y-3.5 text-left md:text-center w-full">
+          <div>
+            <p className="text-[10px] uppercase font-bold tracking-widest text-primary flex items-center gap-1.5 md:justify-center">
+              <Star className="h-3 w-3 fill-current" /> Profile Stats
+            </p>
+            <h3 className="text-lg font-bold text-text mt-1">Platform Progress</h3>
+            <p className="text-xs text-text-secondary mt-0.5">
+              You unlocked {stats.unlocked} out of {stats.total} classic badges!
+            </p>
+          </div>
+          
+          <button
+            onClick={toggleAmbience}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all duration-200 md:mx-auto outline-none select-none ${
+              ambience
+                ? 'bg-primary/10 border-primary/30 text-primary shadow-[var(--shadow-glow)]'
+                : 'bg-surface border-border text-text-secondary hover:text-text'
+            }`}
+          >
+            {ambience ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            <span>80s Arcade Ambience</span>
+          </button>
         </div>
         <div className="shrink-0 flex items-center justify-center">
           <CircularProgress value={stats.percent} size={84}>

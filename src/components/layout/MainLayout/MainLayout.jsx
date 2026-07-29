@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Header } from '@components/layout/Header';
 import { Footer } from '@components/layout/Footer';
 import { QuickPlayProvider } from '@context/index';
+import { CommandPalette } from '@components/common';
 
 export function MainLayout() {
   const location = useLocation();
@@ -32,6 +33,7 @@ export function MainLayout() {
         </main>
 
         <Footer />
+        <CommandPalette />
       </div>
     </QuickPlayProvider>
   );
