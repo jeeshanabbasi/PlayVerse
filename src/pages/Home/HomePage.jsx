@@ -4,6 +4,7 @@ import { pageFade } from '@utils/index';
 import { HeroSection } from './sections/HeroSection';
 import { FeaturedSection } from './sections/FeaturedSection';
 import { ContinuePlayingSection } from './sections/ContinuePlayingSection';
+import { LeaderboardSection } from './sections/LeaderboardSection';
 import { AchievementsHub } from '@components/game';
 
 function HomePageComponent() {
@@ -21,6 +22,7 @@ function HomePageComponent() {
         <AchievementsHub />
         <FeaturedSection />
         <ContinuePlayingSection />
+        <LeaderboardSection />
       </div>
     </motion.div>
   );

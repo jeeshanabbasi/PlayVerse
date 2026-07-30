@@ -27,5 +27,5 @@ export const DEFAULT_SETTINGS = Object.freeze({
   showFps: false,
   debug: false,
   touchControls: true,
-  crt: false,
+  crt: typeof window !== 'undefined' ? localStorage.getItem('playverse_global_crt') === 'true' : false,
 });

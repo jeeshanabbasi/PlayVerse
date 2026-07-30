@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Settings } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
 import { NavList } from '@components/layout/Navigation';
 import { NAV_ITEMS } from '@constants/navigation';
+import { SettingsDrawer } from './SettingsDrawer';
+import { playUiClick, playUiTick } from '@utils/index';
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const closeMobile = () => setMobileOpen(false);
 
   return (
@@ -15,20 +18,36 @@ export function Header() {
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           <Logo />
 
-          <NavList
-            items={NAV_ITEMS}
-            className="hidden md:flex"
-          />
+          <div className="flex items-center gap-3">
+            <NavList
+              items={NAV_ITEMS}
+              className="hidden md:flex"
+            />
+            
+            <button
+              type="button"
+              onClick={() => {
+                playUiClick();
+                setSettingsOpen(true);
+              }}
+              onMouseEnter={playUiTick}
+              className="p-2 rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-border-hover transition-colors cursor-pointer"
+              title="Console settings"
+              aria-label="Console settings"
+            >
+              <Settings className="w-4.5 h-4.5" />
+            </button>
 
-          <button
-            type="button"
-            className="btn-ghost p-2.5 md:hidden"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((prev) => !prev)}
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            <button
+              type="button"
+              className="btn-ghost p-2.5 md:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((prev) => !prev)}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -51,6 +70,12 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <SettingsDrawer
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
     </header>
   );
 }
+export default Header;
