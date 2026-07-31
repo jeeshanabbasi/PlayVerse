@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Header } from '@components/layout/Header';
 import { Footer } from '@components/layout/Footer';
+import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider } from '@context/index';
 import { CommandPalette } from '@components/common';
 
 export function MainLayout() {
   const location = useLocation();
   const outlet = useOutlet();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <QuickPlayProvider>
@@ -19,7 +22,7 @@ export function MainLayout() {
           Skip to content
         </a>
 
-        <Header />
+        <Header onSettingsClick={() => setSettingsOpen(true)} />
 
         <main id="main-content" className="flex-1 flex flex-col min-w-0">
           <AnimatePresence mode="wait" initial={false}>
@@ -34,6 +37,11 @@ export function MainLayout() {
 
         <Footer />
         <CommandPalette />
+        
+        <SettingsDrawer
+          isOpen={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
       </div>
     </QuickPlayProvider>
   );

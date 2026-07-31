@@ -4,12 +4,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
 import { NavList } from '@components/layout/Navigation';
 import { NAV_ITEMS } from '@constants/navigation';
-import { SettingsDrawer } from './SettingsDrawer';
 import { playUiClick, playUiTick } from '@utils/index';
 
-export function Header() {
+export function Header({ onSettingsClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const closeMobile = () => setMobileOpen(false);
 
   return (
@@ -28,7 +26,7 @@ export function Header() {
               type="button"
               onClick={() => {
                 playUiClick();
-                setSettingsOpen(true);
+                onSettingsClick?.();
               }}
               onMouseEnter={playUiTick}
               className="p-2 rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-border-hover transition-colors cursor-pointer"
@@ -70,11 +68,6 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <SettingsDrawer
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-      />
     </header>
   );
 }

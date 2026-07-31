@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Medal, Trophy, Star, Volume2, VolumeX } from 'lucide-react';
 import { gamesCatalog } from '@data/games';
@@ -8,6 +8,36 @@ import { playUiClick, startAmbientSoundscape, stopAmbientSoundscape } from '@uti
 
 function AchievementsHubComponent() {
   const [ambience, setAmbience] = useState(false);
+  const [profile, setProfile] = useState(() => {
+    try {
+      const stored = localStorage.getItem('playverse_profile');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return {
+          nickname: parsed.nickname || 'Jeeshan Abbasi',
+          avatar: parsed.avatar || '👾',
+        };
+      }
+    } catch {}
+    return { nickname: 'Jeeshan Abbasi', avatar: '👾' };
+  });
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      try {
+        const stored = localStorage.getItem('playverse_profile');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setProfile({
+            nickname: parsed.nickname || 'Jeeshan Abbasi',
+            avatar: parsed.avatar || '👾',
+          });
+        }
+      } catch {}
+    };
+    window.addEventListener('playverse_profile_updated', handleProfileUpdate);
+    return () => window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+  }, []);
 
   const toggleAmbience = () => {
     playUiClick();
@@ -69,7 +99,9 @@ function AchievementsHubComponent() {
             <Trophy className="h-6 w-6" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-base font-semibold text-text">Achievements Profile</h3>
+            <h3 className="text-base font-semibold text-text">
+              {profile.avatar} {profile.nickname}'s Achievements
+            </h3>
             <p className="text-xs text-text-secondary">
               Play classic games to unlock unique badges and complete your catalog.
             </p>
@@ -106,7 +138,9 @@ function AchievementsHubComponent() {
             <p className="text-[10px] uppercase font-bold tracking-widest text-primary flex items-center gap-1.5 md:justify-center">
               <Star className="h-3 w-3 fill-current" /> Profile Stats
             </p>
-            <h3 className="text-lg font-bold text-text mt-1">Platform Progress</h3>
+            <h3 className="text-lg font-bold text-text mt-1">
+              {profile.avatar} {profile.nickname}
+            </h3>
             <p className="text-xs text-text-secondary mt-0.5">
               You unlocked {stats.unlocked} out of {stats.total} classic badges!
             </p>
@@ -162,3 +196,4 @@ function AchievementsHubComponent() {
 }
 
 export const AchievementsHub = memo(AchievementsHubComponent);
+export default AchievementsHub;

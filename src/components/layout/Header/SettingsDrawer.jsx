@@ -1,17 +1,60 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert } from 'lucide-react';
+import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User } from 'lucide-react';
 import { cn, playUiTick, playUiClick, setMuteState, getMuteState } from '@utils/index';
 import { useToast } from '@context/index';
 
+const AVATARS = ['👾', '🚀', '🐱', '🦖', '👑', '⚡', '👽', '🦊', '🤖'];
+
 function SettingsDrawerComponent({ isOpen, onClose }) {
   const { addToast } = useToast();
+  
+  const [nickname, setNickname] = useState(() => {
+    try {
+      const stored = localStorage.getItem('playverse_profile');
+      if (stored) return JSON.parse(stored).nickname || 'Jeeshan Abbasi';
+    } catch {}
+    return 'Jeeshan Abbasi';
+  });
+
+  const [selectedAvatar, setSelectedAvatar] = useState(() => {
+    try {
+      const stored = localStorage.getItem('playverse_profile');
+      if (stored) return JSON.parse(stored).avatar || '👾';
+    } catch {}
+    return '👾';
+  });
+
   const [crtEnabled, setCrtEnabled] = useState(() => {
     return localStorage.getItem('playverse_global_crt') === 'true';
   });
+
   const [soundMuted, setSoundMuted] = useState(() => {
     return getMuteState();
   });
+
+  // Save profile edits in local storage and dispatch update event
+  const saveProfile = (nextNick, nextAv) => {
+    try {
+      localStorage.setItem(
+        'playverse_profile',
+        JSON.stringify({ nickname: nextNick, avatar: nextAv })
+      );
+      window.dispatchEvent(new Event('playverse_profile_updated'));
+    } catch {}
+  };
+
+  const handleNicknameChange = (e) => {
+    const val = e.target.value;
+    setNickname(val);
+    saveProfile(val, selectedAvatar);
+  };
+
+  const handleAvatarSelect = (av) => {
+    playUiClick();
+    setSelectedAvatar(av);
+    saveProfile(nickname, av);
+  };
 
   const handleToggleCrt = () => {
     playUiClick();
@@ -37,7 +80,6 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
   const handleClearData = () => {
     playUiClick();
     if (window.confirm('Are you sure you want to reset all game high scores, history, and achievements? This action is permanent.')) {
-      // Loop through localStorage keys and delete those matching playverse prefix
       try {
         const keysToRemove = [];
         for (let i = 0; i < localStorage.length; i++) {
@@ -80,7 +122,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-            className="w-full max-w-sm h-full bg-background border-l border-border px-6 py-8 flex flex-col justify-between shadow-2xl relative"
+            className="w-full max-w-sm h-full bg-background border-l border-border px-6 py-8 flex flex-col justify-between shadow-2xl relative overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="space-y-8">
@@ -101,8 +143,53 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
                 </button>
               </div>
 
-              {/* Settings items */}
-              <div className="space-y-6 text-left">
+              {/* Gamer Profile settings */}
+              <div className="space-y-4 text-left">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-text-muted flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5" /> Profile Settings
+                </p>
+
+                {/* Nickname Input */}
+                <div className="space-y-1.5">
+                  <label htmlFor="gamer-nickname" className="text-xs font-semibold text-text-secondary">Gamer Nickname</label>
+                  <input
+                    id="gamer-nickname"
+                    type="text"
+                    value={nickname}
+                    onChange={handleNicknameChange}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-surface text-sm text-text placeholder-text-muted focus:border-primary/45 focus:outline-none transition-colors"
+                    placeholder="Enter gamer name..."
+                  />
+                </div>
+
+                {/* Emojis Selector */}
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-text-secondary">Choose Avatar</p>
+                  <div className="grid grid-cols-5 gap-2.5">
+                    {AVATARS.map((av) => (
+                      <button
+                        key={av}
+                        type="button"
+                        onClick={() => handleAvatarSelect(av)}
+                        onMouseEnter={playUiTick}
+                        className={cn(
+                          'flex items-center justify-center h-10 w-10 text-xl rounded-xl border transition-all duration-200',
+                          selectedAvatar === av
+                            ? 'bg-primary/10 border-primary text-text shadow-[var(--shadow-glow)]'
+                            : 'bg-surface border-border hover:border-border-hover text-text-secondary'
+                        )}
+                      >
+                        {av}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Console Settings items */}
+              <div className="space-y-4 text-left pt-4 border-t border-border/40">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Console Preferences</p>
+                
                 {/* CRT Mode */}
                 <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/80 bg-surface/50">
                   <div className="flex items-center gap-3">
@@ -150,7 +237,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
             </div>
 
             {/* Reset data block */}
-            <div className="space-y-4">
+            <div className="space-y-4 mt-8 pt-4 border-t border-border/40">
               <div className="flex gap-3 items-start p-4 rounded-xl bg-error/5 border border-error/20 text-left">
                 <ShieldAlert className="w-5 h-5 text-error shrink-0 mt-0.5" />
                 <div>
@@ -174,3 +261,4 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
 }
 
 export const SettingsDrawer = memo(SettingsDrawerComponent);
+export default SettingsDrawer;

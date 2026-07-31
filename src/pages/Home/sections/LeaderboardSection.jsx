@@ -1,6 +1,6 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Star, Gamepad2, Medal } from 'lucide-react';
+import { Trophy, Star, Gamepad2 } from 'lucide-react';
 import { gamesCatalog } from '@data/games';
 import { createGameStorage } from '@games/utils/storage';
 import { staggerContainer, staggerItem } from '@utils/index';
@@ -12,14 +12,43 @@ const MOCK_BOTS = [
 ];
 
 function LeaderboardSectionComponent() {
+  const [profile, setProfile] = useState(() => {
+    try {
+      const stored = localStorage.getItem('playverse_profile');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return {
+          nickname: parsed.nickname || 'Jeeshan Abbasi',
+          avatar: parsed.avatar || '👾',
+        };
+      }
+    } catch {}
+    return { nickname: 'Jeeshan Abbasi', avatar: '👾' };
+  });
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      try {
+        const stored = localStorage.getItem('playverse_profile');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setProfile({
+            nickname: parsed.nickname || 'Jeeshan Abbasi',
+            avatar: parsed.avatar || '👾',
+          });
+        }
+      } catch {}
+    };
+    window.addEventListener('playverse_profile_updated', handleProfileUpdate);
+    return () => window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+  }, []);
+
   const leaderboardData = useMemo(() => {
-    // We only show games where user can get high scores
     const scoringGames = gamesCatalog.filter((game) =>
       ['snake', 'tetris', 'breakout', 'pong', 'twenty-forty-eight', 'flappy-bird', 'dino-run', 'space-shooter'].includes(game.id)
     );
 
     return scoringGames.map((game) => {
-      // Load user high score
       let userScore = 0;
       try {
         const storage = createGameStorage(game.id);
@@ -28,10 +57,8 @@ function LeaderboardSectionComponent() {
         userScore = 0;
       }
 
-      // Generate base target score for the game
       const targetBase = game.id === 'tetris' ? 500 : game.id === 'twenty-forty-eight' ? 2048 : game.id === 'snake' ? 120 : 60;
 
-      // Map bots and user
       const list = [
         ...MOCK_BOTS.map((bot) => ({
           name: bot.name,
@@ -39,16 +66,14 @@ function LeaderboardSectionComponent() {
           isUser: false,
         })),
         {
-          name: 'You (Jeeshan Abbasi) ⚡',
+          name: `You (${profile.avatar} ${profile.nickname})`,
           score: userScore,
           isUser: true,
         },
       ];
 
-      // Sort descending
       list.sort((a, b) => b.score - a.score);
 
-      // Find user rank
       const userRank = list.findIndex((item) => item.isUser) + 1;
 
       return {
@@ -58,10 +83,10 @@ function LeaderboardSectionComponent() {
         userScore,
         userRank,
         topScore: list[0].score,
-        rankings: list.slice(0, 4), // show top 4
+        rankings: list.slice(0, 4),
       };
     });
-  }, []);
+  }, [profile]);
 
   return (
     <section className="space-y-8 pb-12">
@@ -88,7 +113,6 @@ function LeaderboardSectionComponent() {
             variants={staggerItem}
             className="flex flex-col rounded-2xl border border-border/85 bg-surface/40 p-5 backdrop-blur-xl hover:border-primary/20 transition-all duration-300"
           >
-            {/* Header game badge */}
             <div className="flex items-center gap-3 border-b border-border/60 pb-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/25 text-primary">
                 <Gamepad2 className="w-4 h-4" />
@@ -99,7 +123,6 @@ function LeaderboardSectionComponent() {
               </div>
             </div>
 
-            {/* Rankings list */}
             <div className="flex-1 mt-4 space-y-2.5">
               {board.rankings.map((rank, index) => {
                 const isGold = index === 0;
@@ -136,7 +159,6 @@ function LeaderboardSectionComponent() {
               })}
             </div>
 
-            {/* Score info strip */}
             <div className="mt-4 border-t border-border/50 pt-3 flex items-center justify-between text-[10px]">
               <span className="text-text-secondary">Your Rank:</span>
               <span className="font-bold flex items-center gap-1 text-primary">
