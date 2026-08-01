@@ -4,6 +4,8 @@ import { createGameEngine } from '../engine/createGame';
 import { resolvePlayableDefinition } from '../registry';
 import { formatLastPlayed, formatScore } from '../utils/scores';
 import { achievementProgress, mergeAchievements } from '../utils/achievements';
+import { useToast } from '@context/index';
+import { playAchievementUnlockedFanfare } from '@utils/index';
 
 export function useGameEngine({
   slug,
@@ -17,6 +19,7 @@ export function useGameEngine({
   const engineRef = useRef(null);
   const settingsRef = useRef(settings);
   const audioRef = useRef(audio);
+  const { addToast } = useToast();
 
   settingsRef.current = settings;
   audioRef.current = audio;
@@ -77,7 +80,21 @@ export function useGameEngine({
               setHighScore(payload?.highScore ?? storage?.getHighScore?.() ?? 0);
             }
             if (event === ENGINE_EVENTS.ACHIEVEMENT) {
+              const prevUnlocked = storage?.getAchievements?.() ?? [];
+              const achievementId = payload?.id;
               setUnlockedAchievements(payload?.unlocked ?? storage?.getAchievements?.() ?? []);
+              
+              if (achievementId && !prevUnlocked.includes(achievementId)) {
+                const match = definition.achievements?.find((a) => a.id === achievementId);
+                playAchievementUnlockedFanfare();
+                if (match) {
+                  addToast({
+                    title: `🏆 Badge Earned: ${match.name}!`,
+                    description: match.description,
+                    variant: 'success',
+                  });
+                }
+              }
             }
             if (event === ENGINE_EVENTS.FPS) {
               setFps(payload?.fps ?? 0);

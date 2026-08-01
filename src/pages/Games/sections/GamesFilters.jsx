@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { GAME_GENRES } from '@data/games';
+import { GAME_GENRES, gamesCatalog } from '@data/games';
 import { cn, playUiTick, playUiClick } from '@utils/index';
 
 export const GamesFilters = memo(function GamesFilters({
@@ -17,6 +17,13 @@ export const GamesFilters = memo(function GamesFilters({
         const val = g.toLowerCase();
         const active = genre === val;
         
+        // Calculate count of games in this genre dynamically
+        const count = val === 'all'
+          ? gamesCatalog.length
+          : gamesCatalog.filter((game) =>
+              game.genres.some((genreName) => genreName.toLowerCase() === val)
+            ).length;
+
         return (
           <button
             key={g}
@@ -40,7 +47,17 @@ export const GamesFilters = memo(function GamesFilters({
                 transition={{ type: 'spring', stiffness: 350, damping: 28 }}
               />
             )}
-            <span>{g}</span>
+            <span className="flex items-center gap-1.5">
+              <span>{g}</span>
+              <span className={cn(
+                'text-[10px] font-mono rounded-full px-1.5 py-0.5 border transition-colors',
+                active
+                  ? 'bg-primary/25 border-primary/30 text-primary'
+                  : 'bg-border/30 border-border text-text-muted'
+              )}>
+                {count}
+              </span>
+            </span>
           </button>
         );
       })}

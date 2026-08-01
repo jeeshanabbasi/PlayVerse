@@ -7,6 +7,7 @@ export function createBaseGameScene(Phaser, key = 'BaseGameScene') {
         emitter: null,
         settings: null,
       };
+      this.emitAchievement = this.unlockAchievement.bind(this);
     }
 
     init(data) {

@@ -144,3 +144,33 @@ export function stopAmbientSoundscape() {
     // ignore
   }
 }
+
+export function playAchievementUnlockedFanfare() {
+  if (getMuteState()) return;
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    
+    // Ascending arpeggio notes (C5, E5, G5, C6)
+    const freqs = [523.25, 659.25, 783.99, 1046.50];
+    
+    freqs.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+      
+      gain.gain.setValueAtTime(0.02, now + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.15);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.15);
+    });
+  } catch {
+    // ignore
+  }
+}
