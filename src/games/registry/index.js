@@ -12,6 +12,7 @@ import { pongDefinition } from './pong/manifest';
 import { breakoutDefinition } from './breakout/manifest';
 import { dinoRunDefinition } from './dinoRun/manifest';
 import { spaceShooterDefinition } from './spaceShooter/manifest';
+import { spaceInvadersDefinition } from './spaceInvaders/manifest';
 
 export function ensurePlaceholderRegistered() {
   if (!GameRegistry.has(enginePlaceholderDefinition.id)) {
@@ -29,6 +30,7 @@ export function ensurePlaceholderRegistered() {
   if (!GameRegistry.has(breakoutDefinition.id)) GameRegistry.register(breakoutDefinition);
   if (!GameRegistry.has(dinoRunDefinition.id)) GameRegistry.register(dinoRunDefinition);
   if (!GameRegistry.has(spaceShooterDefinition.id)) GameRegistry.register(spaceShooterDefinition);
+  if (!GameRegistry.has(spaceInvadersDefinition.id)) GameRegistry.register(spaceInvadersDefinition);
 }
 
 export function resolvePlayableDefinition(slug) {
@@ -55,3 +57,4 @@ export * from './pong/manifest';
 export * from './breakout/manifest';
 export * from './dinoRun/manifest';
 export * from './spaceShooter/manifest';
+export * from './spaceInvaders/manifest';
