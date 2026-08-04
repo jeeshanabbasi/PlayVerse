@@ -8,6 +8,7 @@ import { playUiClick, startAmbientSoundscape, stopAmbientSoundscape } from '@uti
 
 function AchievementsHubComponent() {
   const [ambience, setAmbience] = useState(false);
+  const [achievementsUpdateKey, setAchievementsUpdateKey] = useState(0);
   const [profile, setProfile] = useState(() => {
     try {
       const stored = localStorage.getItem('playverse_profile');
@@ -34,9 +35,14 @@ function AchievementsHubComponent() {
           });
         }
       } catch {}
+      setAchievementsUpdateKey((k) => k + 1);
     };
     window.addEventListener('playverse_profile_updated', handleProfileUpdate);
-    return () => window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+    window.addEventListener('playverse_achievements_updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+      window.removeEventListener('playverse_achievements_updated', handleProfileUpdate);
+    };
   }, []);
 
   const toggleAmbience = () => {
@@ -81,6 +87,20 @@ function AchievementsHubComponent() {
       });
     });
 
+    // Check for secret platform Konami code Easter Egg achievement
+    if (localStorage.getItem('playverse_konami_unlocked') === 'true') {
+      unlocked += 1;
+      total += 1;
+      unlockedBadges.unshift({
+        id: 'konami-code',
+        name: 'Classic Codebreaker',
+        description: 'Activated the legendary Konami cheat code.',
+        icon: '👑',
+        gameTitle: 'Secret Code',
+        gameId: 'platform',
+      });
+    }
+
     const percent = total > 0 ? Math.round((unlocked / total) * 100) : 0;
 
     return {
@@ -89,7 +109,7 @@ function AchievementsHubComponent() {
       percent,
       unlockedBadges,
     };
-  }, []);
+  }, [achievementsUpdateKey]);
 
   if (stats.unlocked === 0) {
     return (

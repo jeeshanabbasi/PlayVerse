@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User } from 'lucide-react';
+import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette } from 'lucide-react';
 import { cn, playUiTick, playUiClick, setMuteState, getMuteState } from '@utils/index';
 import { useToast } from '@context/index';
 
@@ -32,6 +32,20 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
   const [soundMuted, setSoundMuted] = useState(() => {
     return getMuteState();
   });
+
+  const [accentTheme, setAccentTheme] = useState(() => {
+    return localStorage.getItem('playverse_accent_theme') || 'purple';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-accent-theme', accentTheme);
+  }, [accentTheme]);
+
+  const handleThemeChange = (theme) => {
+    playUiClick();
+    setAccentTheme(theme);
+    localStorage.setItem('playverse_accent_theme', theme);
+  };
 
   // Save profile edits in local storage and dispatch update event
   const saveProfile = (nextNick, nextAv) => {
@@ -125,7 +139,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
             className="w-full max-w-sm h-full bg-background border-l border-border px-6 py-8 flex flex-col justify-between shadow-2xl relative overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Header */}
               <div className="flex items-center justify-between border-b border-border/60 pb-4">
                 <div className="space-y-1 text-left">
@@ -165,7 +179,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
                 {/* Emojis Selector */}
                 <div className="space-y-2">
                   <p className="text-xs font-semibold text-text-secondary">Choose Avatar</p>
-                  <div className="grid grid-cols-5 gap-2.5">
+                  <div className="grid grid-cols-5 gap-2">
                     {AVATARS.map((av) => (
                       <button
                         key={av}
@@ -183,6 +197,37 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
                       </button>
                     ))}
                   </div>
+                </div>
+              </div>
+
+              {/* Theme Customizer settings */}
+              <div className="space-y-4 text-left pt-4 border-t border-border/40">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-text-muted flex items-center gap-1.5">
+                  <Palette className="w-3.5 h-3.5" /> Console Accent
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: 'purple', name: 'Default', colorClass: 'bg-[#7c3aed]' },
+                    { id: 'green', name: 'Matrix', colorClass: 'bg-[#10b981]' },
+                    { id: 'orange', name: 'Outrun', colorClass: 'bg-[#f97316]' },
+                    { id: 'blue', name: 'Cobalt', colorClass: 'bg-[#2563eb]' },
+                  ].map((theme) => (
+                    <button
+                      key={theme.id}
+                      type="button"
+                      onClick={() => handleThemeChange(theme.id)}
+                      onMouseEnter={playUiTick}
+                      className={cn(
+                        'flex flex-col items-center gap-1.5 p-2.5 rounded-xl border text-[10px] font-semibold transition-all duration-200 cursor-pointer',
+                        accentTheme === theme.id
+                          ? 'border-primary bg-primary/10 text-text shadow-[var(--shadow-glow)]'
+                          : 'bg-surface border-border text-text-secondary hover:border-border-hover'
+                      )}
+                    >
+                      <span className={cn('h-3.5 w-3.5 rounded-full border border-white/20', theme.colorClass)} />
+                      <span>{theme.name}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
 

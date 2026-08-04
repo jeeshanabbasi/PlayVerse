@@ -1,14 +1,50 @@
 @import 'tailwindcss';
 
+:root {
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-rgb: 124, 58, 237;
+  --accent: #22d3ee;
+  --accent-hover: #06b6d4;
+  --accent-rgb: 34, 211, 238;
+}
+
+[data-accent-theme="green"] {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-rgb: 16, 185, 129;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-rgb: 245, 158, 11;
+}
+
+[data-accent-theme="orange"] {
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-rgb: 249, 115, 22;
+  --accent: #22d3ee;
+  --accent-hover: #06b6d4;
+  --accent-rgb: 34, 211, 238;
+}
+
+[data-accent-theme="blue"] {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-rgb: 37, 99, 235;
+  --accent: #f43f5e;
+  --accent-hover: #e11d48;
+  --accent-rgb: 244, 63, 94;
+}
+
 @theme {
   --font-sans: 'Space Grotesk', system-ui, sans-serif;
 
-  --color-primary: #7c3aed;
-  --color-primary-hover: #6d28d9;
-  --color-primary-muted: rgba(124, 58, 237, 0.15);
-  --color-accent: #22d3ee;
-  --color-accent-hover: #06b6d4;
-  --color-accent-muted: rgba(34, 211, 238, 0.12);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-muted: rgba(var(--primary-rgb), 0.15);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-muted: rgba(var(--accent-rgb), 0.12);
 
   --color-background: #09090b;
   --color-surface: #111113;
@@ -37,9 +73,9 @@
 
   --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.28);
   --shadow-blur: 0 12px 40px rgba(0, 0, 0, 0.35);
-  --shadow-glow: 0 0 24px rgba(124, 58, 237, 0.22);
-  --shadow-glow-primary: 0 0 32px rgba(124, 58, 237, 0.28);
-  --shadow-glow-accent: 0 0 28px rgba(34, 211, 238, 0.22);
+  --shadow-glow: 0 0 24px rgba(var(--primary-rgb), 0.22);
+  --shadow-glow-primary: 0 0 32px rgba(var(--primary-rgb), 0.28);
+  --shadow-glow-accent: 0 0 28px rgba(var(--accent-rgb), 0.22);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.32);
   --shadow-lift: 0 16px 48px rgba(0, 0, 0, 0.4);
 
@@ -75,8 +111,8 @@
   body {
     @apply bg-background text-text font-sans min-h-dvh;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(34, 211, 238, 0.06), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(var(--primary-rgb), 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(var(--accent-rgb), 0.06), transparent);
   }
 
   ::selection {

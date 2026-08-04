@@ -174,3 +174,26 @@ export function playAchievementUnlockedFanfare() {
     // ignore
   }
 }
+
+export function playKonamiChime() {
+  if (getMuteState()) return;
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    const notes = [1046.50, 1318.51, 1567.98, 2093.00, 2637.02, 3135.96]; // C6, E6, G6, C7, E7, G7
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+      gain.gain.setValueAtTime(0.015, now + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.2);
+    });
+  } catch {
+    // ignore
+  }
+}

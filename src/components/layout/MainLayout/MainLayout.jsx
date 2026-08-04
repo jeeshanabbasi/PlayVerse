@@ -1,16 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Header } from '@components/layout/Header';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
-import { QuickPlayProvider } from '@context/index';
+import { QuickPlayProvider, useToast } from '@context/index';
 import { CommandPalette } from '@components/common';
+import { useKonamiCode } from '@hooks/index';
+import { playKonamiChime } from '@utils/index';
 
 export function MainLayout() {
   const location = useLocation();
   const outlet = useOutlet();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('playverse_accent_theme') || 'purple';
+    document.documentElement.setAttribute('data-accent-theme', storedTheme);
+  }, []);
+
+  useKonamiCode(() => {
+    const isUnlocked = localStorage.getItem('playverse_konami_unlocked') === 'true';
+    if (!isUnlocked) {
+      localStorage.setItem('playverse_konami_unlocked', 'true');
+      window.dispatchEvent(new Event('playverse_achievements_updated'));
+      playKonamiChime();
+      addToast({
+        title: '👑 Secret Code Activated!',
+        description: 'You unlocked the secret badge: Classic Codebreaker!',
+        variant: 'success',
+      });
+    } else {
+      addToast({
+        title: '👽 Code Active!',
+        description: 'You have already unlocked this secret badge.',
+        variant: 'info',
+      });
+    }
+  });
 
   return (
     <QuickPlayProvider>
