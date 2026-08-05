@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useEffect } from 'react';
+import { memo, useCallback, useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EmptyState } from '@ui';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useGameEngine, useGameSettings, useFullscreen } from '../hooks';
 import { GameToolbar } from './GameToolbar';
 import { GameCanvas } from './GameCanvas';
 import { GameSidebar } from './GameSidebar';
-import { TouchControls } from './TouchControls';
+import { VirtualController } from './VirtualController';
 import { RelatedGamesBar } from './RelatedGamesBar';
 import { cn } from '@utils/index';
 
@@ -20,6 +20,20 @@ export const GamePlayShell = memo(function GamePlayShell({
   const navigate = useNavigate();
   const shellRef = useRef(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(shellRef);
+
+  const [showVirtualController, setShowVirtualController] = useState(() => {
+    const raw = localStorage.getItem('playverse_mobile_controls');
+    return raw ? raw === 'true' : true;
+  });
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const raw = localStorage.getItem('playverse_mobile_controls');
+      setShowVirtualController(raw ? raw === 'true' : true);
+    };
+    window.addEventListener('playverse_mobile_controls_updated', handleUpdate);
+    return () => window.removeEventListener('playverse_mobile_controls_updated', handleUpdate);
+  }, []);
 
   useEffect(() => {
     if (slug) {
@@ -131,12 +145,7 @@ export const GamePlayShell = memo(function GamePlayShell({
               paused={engine.paused}
               crt={settings.crt}
             />
-            <TouchControls
-              visible={settings.touchControls}
-              onPause={engine.togglePause}
-              onAction={() => {}}
-              onDirection={() => {}}
-            />
+            {showVirtualController && <VirtualController />}
           </div>
 
           <GameSidebar

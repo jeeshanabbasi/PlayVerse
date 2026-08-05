@@ -4,4 +4,5 @@ export { GameCanvas } from './GameCanvas';
 export { GameSidebar } from './GameSidebar';
 export { GameLoadingScreen } from './GameLoadingScreen';
 export { TouchControls } from './TouchControls';
+export { VirtualController } from './VirtualController';
 export { RelatedGamesBar } from './RelatedGamesBar';

@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette } from 'lucide-react';
+import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad } from 'lucide-react';
 import { cn, playUiTick, playUiClick, setMuteState, getMuteState } from '@utils/index';
 import { useToast } from '@context/index';
 
@@ -37,6 +37,11 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     return localStorage.getItem('playverse_accent_theme') || 'purple';
   });
 
+  const [mobileControls, setMobileControls] = useState(() => {
+    const raw = localStorage.getItem('playverse_mobile_controls');
+    return raw ? raw === 'true' : true;
+  });
+
   useEffect(() => {
     document.documentElement.setAttribute('data-accent-theme', accentTheme);
   }, [accentTheme]);
@@ -45,6 +50,14 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     playUiClick();
     setAccentTheme(theme);
     localStorage.setItem('playverse_accent_theme', theme);
+  };
+
+  const handleToggleMobileControls = () => {
+    playUiClick();
+    const next = !mobileControls;
+    setMobileControls(next);
+    localStorage.setItem('playverse_mobile_controls', next ? 'true' : 'false');
+    window.dispatchEvent(new Event('playverse_mobile_controls_updated'));
   };
 
   // Save profile edits in local storage and dispatch update event
@@ -251,6 +264,28 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
                       type="checkbox"
                       checked={crtEnabled}
                       onChange={handleToggleCrt}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-border rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
+                  </label>
+                </div>
+
+                {/* Mobile Virtual Controller Mode */}
+                <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/80 bg-surface/50">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/25">
+                      <Gamepad className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-text">Mobile D-Pad Overlay</p>
+                      <p className="text-[11px] text-text-secondary">Touch screen controller.</p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={mobileControls}
+                      onChange={handleToggleMobileControls}
                       className="sr-only peer"
                     />
                     <div className="w-9 h-5 bg-border rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
