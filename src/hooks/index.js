@@ -7,3 +7,4 @@ export { useCountdown } from './useCountdown';
 export { useDebounce } from './useDebounce';
 export { useGamesExplorer, INITIAL_GAME_FILTERS } from './useGamesExplorer';
 export { useKonamiCode } from './useKonamiCode';
+export { useFavorites } from './useFavorites';

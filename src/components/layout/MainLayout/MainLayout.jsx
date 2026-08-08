@@ -5,7 +5,7 @@ import { Header } from '@components/layout/Header';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
-import { CommandPalette } from '@components/common';
+import { CommandPalette, SurpriseMeModal, ArcadeScreensaver } from '@components/common';
 import { useKonamiCode } from '@hooks/index';
 import { playKonamiChime } from '@utils/index';
 
@@ -13,11 +13,16 @@ export function MainLayout() {
   const location = useLocation();
   const outlet = useOutlet();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [surpriseMeOpen, setSurpriseMeOpen] = useState(false);
   const { addToast } = useToast();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('playverse_accent_theme') || 'purple';
     document.documentElement.setAttribute('data-accent-theme', storedTheme);
+
+    const handleOpenSurpriseMe = () => setSurpriseMeOpen(true);
+    window.addEventListener('playverse_open_surprise_me', handleOpenSurpriseMe);
+    return () => window.removeEventListener('playverse_open_surprise_me', handleOpenSurpriseMe);
   }, []);
 
   useKonamiCode(() => {
@@ -70,6 +75,13 @@ export function MainLayout() {
           isOpen={settingsOpen}
           onClose={() => setSettingsOpen(false)}
         />
+
+        <SurpriseMeModal
+          isOpen={surpriseMeOpen}
+          onClose={() => setSurpriseMeOpen(false)}
+        />
+
+        <ArcadeScreensaver />
       </div>
     </QuickPlayProvider>
   );

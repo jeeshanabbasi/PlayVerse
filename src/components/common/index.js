@@ -5,3 +5,5 @@ export { Skeleton, SkeletonText, SkeletonCard, SkeletonAvatar, SkeletonGrid } fr
 export { ToastContainer } from './Toast';
 export { RoutePlaceholder } from './RoutePlaceholder';
 export { CommandPalette } from './CommandPalette/CommandPalette';
+export { SurpriseMeModal } from './SurpriseMe/SurpriseMeModal';
+export { ArcadeScreensaver } from './Screensaver/ArcadeScreensaver';

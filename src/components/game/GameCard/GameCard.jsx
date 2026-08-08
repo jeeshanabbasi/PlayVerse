@@ -1,9 +1,10 @@
 import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Info } from 'lucide-react';
+import { Play, Info, Heart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn, playUiTick, playUiClick } from '@utils/index';
 import { useQuickPlay } from '@context/index';
+import { useFavorites } from '@hooks/index';
 
 function GameCardComponent({
   id,
@@ -16,6 +17,7 @@ function GameCardComponent({
   const slug = id;
   const [imageLoaded, setImageLoaded] = useState(false);
   const { openGame } = useQuickPlay();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleInfoClick = (e) => {
     e.preventDefault();
@@ -70,7 +72,24 @@ function GameCardComponent({
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
 
-        {/* Info Icon Button (Absolute Position) */}
+        {/* Favorite Heart Button (Absolute Position Top-Left) */}
+        <button
+          type="button"
+          onClick={(e) => toggleFavorite(slug, e)}
+          onMouseEnter={playUiTick}
+          className={cn(
+            'absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-200 cursor-pointer',
+            isFavorite(slug)
+              ? 'bg-primary/20 border-primary/40 text-primary opacity-100 shadow-[var(--shadow-glow)]'
+              : 'bg-background/80 text-text-secondary border-border/40 opacity-0 group-hover:opacity-100 hover:bg-background hover:text-text'
+          )}
+          title={isFavorite(slug) ? 'Remove from favorites' : 'Add to favorites'}
+          aria-label={isFavorite(slug) ? `Remove ${title} from favorites` : `Add ${title} to favorites`}
+        >
+          <Heart className={cn('h-4 w-4 transition-colors', isFavorite(slug) && 'fill-current text-primary')} />
+        </button>
+
+        {/* Info Icon Button (Absolute Position Top-Right) */}
         <button
           onClick={handleInfoClick}
           onMouseEnter={playUiTick}
@@ -98,9 +117,9 @@ function GameCardComponent({
           to={`/play/${slug}`}
           onClick={handlePlayClick}
           onMouseEnter={playUiTick}
-          className="mt-auto inline-flex items-center justify-center gap-2 w-full py-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-xl transition-all duration-200"
+          className="btn-primary mt-auto w-full justify-center text-body-sm py-2.5 shadow-[var(--shadow-soft)]"
         >
-          <Play className="h-4 w-4 fill-current ml-0.5" />
+          <Play className="h-4 w-4 fill-current mr-1.5" />
           <span>Play</span>
         </Link>
       </div>
@@ -109,3 +128,4 @@ function GameCardComponent({
 }
 
 export const GameCard = memo(GameCardComponent);
+export default GameCard;

@@ -75,11 +75,18 @@ export function useGamesExplorer(source = gamesCatalog) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState(INITIAL_GAME_FILTERS);
   const [isLoading, setIsLoading] = useState(true);
+  const [favUpdateKey, setFavUpdateKey] = useState(0);
   const debouncedQuery = useDebounce(query, 280);
 
   useEffect(() => {
     const id = setTimeout(() => setIsLoading(false), 450);
     return () => clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    const handleFavUpdate = () => setFavUpdateKey((k) => k + 1);
+    window.addEventListener('playverse_favorites_updated', handleFavUpdate);
+    return () => window.removeEventListener('playverse_favorites_updated', handleFavUpdate);
   }, []);
 
   const setFilter = useCallback((key, value) => {
@@ -98,7 +105,17 @@ export function useGamesExplorer(source = gamesCatalog) {
   const results = useMemo(() => {
     const filtered = source.filter((game) => {
       if (!matchesSearch(game, debouncedQuery)) return false;
-      if (filters.genre !== 'all' && !game.genres.includes(filters.genre)) return false;
+      if (filters.genre === 'favorites') {
+        try {
+          const raw = localStorage.getItem('playverse_favorites');
+          const favs = raw ? JSON.parse(raw) : [];
+          if (!favs.includes(game.id)) return false;
+        } catch {
+          return false;
+        }
+      } else if (filters.genre !== 'all' && !game.genres.some((g) => g.toLowerCase() === filters.genre.toLowerCase())) {
+        return false;
+      }
       if (filters.platform !== 'all' && !game.platforms.includes(filters.platform)) return false;
       if (filters.difficulty !== 'all' && game.difficulty !== filters.difficulty) return false;
       if (filters.rating !== 'any' && game.rating < Number(filters.rating)) return false;
@@ -109,7 +126,7 @@ export function useGamesExplorer(source = gamesCatalog) {
     });
 
     return sortGames(filtered, filters.sort);
-  }, [source, debouncedQuery, filters]);
+  }, [source, debouncedQuery, filters, favUpdateKey]);
 
   const hasActiveFilters = useMemo(() => {
     return (

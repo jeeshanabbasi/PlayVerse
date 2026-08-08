@@ -1,7 +1,9 @@
 import { memo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Dices } from 'lucide-react';
 import { Button } from '@ui';
+import { playUiClick } from '@utils/index';
 
 export const HeroSection = memo(function HeroSection() {
   const canvasRef = useRef(null);
@@ -214,6 +216,18 @@ export const HeroSection = memo(function HeroSection() {
           >
             Browse Collection
           </Link>
+
+          <button
+            type="button"
+            onClick={() => {
+              playUiClick();
+              window.dispatchEvent(new Event('playverse_open_surprise_me'));
+            }}
+            className="inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 px-6 text-base font-semibold text-primary shadow-[var(--shadow-glow)] transition-all duration-200 cursor-pointer"
+          >
+            <Dices className="w-5 h-5 animate-spin-slow" />
+            <span>Surprise Me</span>
+          </button>
         </motion.div>
       </div>
     </section>
