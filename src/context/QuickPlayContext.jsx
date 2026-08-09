@@ -2,7 +2,8 @@ import { createContext, useContext, useState, useCallback, useMemo } from 'react
 import { AnimatePresence, motion } from 'framer-motion';
 import { GamePlayShell } from '@games';
 import { X } from 'lucide-react';
-import { playUiClick } from '@utils/index';
+import { playUiClick, playWarpSound } from '@utils/index';
+import { CyberWarpOverlay } from '@components/common';
 
 const QuickPlayContext = createContext({
   activeSlug: null,
@@ -12,9 +13,16 @@ const QuickPlayContext = createContext({
 
 export function QuickPlayProvider({ children }) {
   const [activeSlug, setActiveSlug] = useState(null);
+  const [warpActive, setWarpActive] = useState(false);
 
   const openGame = useCallback((slug) => {
+    playWarpSound();
+    setWarpActive(true);
     setActiveSlug(slug);
+
+    setTimeout(() => {
+      setWarpActive(false);
+    }, 450);
   }, []);
 
   const closeGame = useCallback(() => {
@@ -31,8 +39,10 @@ export function QuickPlayProvider({ children }) {
     <QuickPlayContext.Provider value={value}>
       {children}
 
+      <CyberWarpOverlay active={warpActive} />
+
       <AnimatePresence>
-        {activeSlug && (
+        {activeSlug && !warpActive && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

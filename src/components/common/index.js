@@ -7,3 +7,4 @@ export { RoutePlaceholder } from './RoutePlaceholder';
 export { CommandPalette } from './CommandPalette/CommandPalette';
 export { SurpriseMeModal } from './SurpriseMe/SurpriseMeModal';
 export { ArcadeScreensaver } from './Screensaver/ArcadeScreensaver';
+export { CyberWarpOverlay } from './WarpTunnel/CyberWarpOverlay';
