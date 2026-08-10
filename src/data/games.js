@@ -163,9 +163,9 @@ export const gamesCatalog = [
   },
   {
     id: 'pong',
-    title: 'Pong',
+    title: 'Pong (2-Player Versus)',
     image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80',
-    genres: ['Arcade', 'Retro'],
+    genres: ['Arcade', 'Retro', '2-Player'],
     platforms: ['web'],
     difficulty: 'Easy',
     rating: 4.4,
