@@ -5,9 +5,8 @@ import { Header } from '@components/layout/Header';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
-import { CommandPalette, SurpriseMeModal, ArcadeScreensaver } from '@components/common';
+import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal } from '@components/common';
 import { useKonamiCode } from '@hooks/index';
-import { playKonamiChime } from '@utils/index';
 
 export function MainLayout() {
   const location = useLocation();
@@ -30,12 +29,17 @@ export function MainLayout() {
     if (!isUnlocked) {
       localStorage.setItem('playverse_konami_unlocked', 'true');
       window.dispatchEvent(new Event('playverse_achievements_updated'));
-      playKonamiChime();
-      addToast({
-        title: '👑 Secret Code Activated!',
-        description: 'You unlocked the secret badge: Classic Codebreaker!',
-        variant: 'success',
-      });
+      window.dispatchEvent(
+        new CustomEvent('playverse_achievement_celebration', {
+          detail: {
+            title: 'Classic Codebreaker',
+            description: 'You entered the legendary retro Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A!',
+            icon: '👑',
+            xp: 1000,
+            isRecord: true,
+          },
+        })
+      );
     } else {
       addToast({
         title: '👽 Code Active!',
@@ -82,6 +86,7 @@ export function MainLayout() {
         />
 
         <ArcadeScreensaver />
+        <TrophyCelebrationModal />
       </div>
     </QuickPlayProvider>
   );

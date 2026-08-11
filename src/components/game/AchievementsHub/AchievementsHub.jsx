@@ -198,7 +198,21 @@ function AchievementsHubComponent() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.05, duration: 0.2 }}
-              className="flex items-center gap-3 shrink-0 px-4 py-3 rounded-xl border border-primary/20 bg-primary/5 hover:border-primary/30 transition-colors"
+              onClick={() => {
+                window.dispatchEvent(
+                  new CustomEvent('playverse_achievement_celebration', {
+                    detail: {
+                      title: badge.name,
+                      description: badge.description || `Milestone achieved in ${badge.gameTitle}!`,
+                      icon: badge.icon ?? '🏆',
+                      xp: 500,
+                      isRecord: false,
+                    },
+                  })
+                );
+              }}
+              className="flex items-center gap-3 shrink-0 px-4 py-3 rounded-xl border border-primary/20 bg-primary/5 hover:border-primary/40 hover:bg-primary/10 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
+              title="Click to inspect 3D Trophy celebration"
             >
               <span className="text-xl leading-none" aria-hidden="true">
                 {badge.icon ?? '🏆'}

@@ -88,11 +88,17 @@ export function useGameEngine({
                 const match = definition.achievements?.find((a) => a.id === achievementId);
                 playAchievementUnlockedFanfare();
                 if (match) {
-                  addToast({
-                    title: `🏆 Badge Earned: ${match.name}!`,
-                    description: match.description,
-                    variant: 'success',
-                  });
+                  window.dispatchEvent(
+                    new CustomEvent('playverse_achievement_celebration', {
+                      detail: {
+                        title: match.name,
+                        description: match.description,
+                        icon: match.icon || '🏆',
+                        xp: 500,
+                        isRecord: false,
+                      },
+                    })
+                  );
                 }
               }
             }
