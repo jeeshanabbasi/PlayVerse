@@ -240,6 +240,22 @@ export const gamesCatalog = [
     isNew: true,
     isTrending: true,
   },
+  {
+    id: 'cyber-boss',
+    title: 'Cyber Boss: Overlord Zero',
+    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80',
+    genres: ['Action', 'Arcade', 'Boss Battle'],
+    platforms: ['web'],
+    difficulty: 'Hard',
+    rating: 5.0,
+    plays: 58000,
+    price: 0,
+    status: 'released',
+    releasedAt: Date.UTC(2026, 0, 1),
+    playTime: 'quick',
+    isNew: true,
+    isTrending: true,
+  },
 ];
 
 export const recentlyPlayedGames = [

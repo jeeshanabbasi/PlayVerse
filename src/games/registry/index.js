@@ -13,6 +13,7 @@ import { breakoutDefinition } from './breakout/manifest';
 import { dinoRunDefinition } from './dinoRun/manifest';
 import { spaceShooterDefinition } from './spaceShooter/manifest';
 import { spaceInvadersDefinition } from './spaceInvaders/manifest';
+import { cyberBossDefinition } from './cyber-boss/manifest';
 
 export function ensurePlaceholderRegistered() {
   if (!GameRegistry.has(enginePlaceholderDefinition.id)) {
@@ -31,6 +32,7 @@ export function ensurePlaceholderRegistered() {
   if (!GameRegistry.has(dinoRunDefinition.id)) GameRegistry.register(dinoRunDefinition);
   if (!GameRegistry.has(spaceShooterDefinition.id)) GameRegistry.register(spaceShooterDefinition);
   if (!GameRegistry.has(spaceInvadersDefinition.id)) GameRegistry.register(spaceInvadersDefinition);
+  if (!GameRegistry.has(cyberBossDefinition.id)) GameRegistry.register(cyberBossDefinition);
 }
 
 export function resolvePlayableDefinition(slug) {
@@ -58,3 +60,4 @@ export * from './breakout/manifest';
 export * from './dinoRun/manifest';
 export * from './spaceShooter/manifest';
 export * from './spaceInvaders/manifest';
+export * from './cyber-boss/manifest';
