@@ -11,14 +11,14 @@ import {
   GameRating,
 } from '@game';
 import { IconButton } from '@ui';
-import { useToast } from '@hooks/index';
+import { useToast, useFavorites } from '@hooks/index';
 import { cn } from '@utils/index';
 
 export const DetailHero = memo(function DetailHero({ game }) {
   const navigate = useNavigate();
   const { success, info } = useToast();
   const [wishlisted, setWishlisted] = useState(false);
-  const [favorited, setFavorited] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const share = useCallback(async () => {
     const url = window.location.href;
@@ -124,8 +124,8 @@ export const DetailHero = memo(function DetailHero({ game }) {
             />
             <FavoriteButton
               size="lg"
-              active={favorited}
-              onToggle={setFavorited}
+              active={isFavorite(game.slug)}
+              onToggle={() => toggleFavorite(game.slug)}
             />
             <IconButton
               variant="secondary"
