@@ -118,6 +118,14 @@ export function ScreenshotGallery({
                   className="relative z-10 max-w-5xl w-full"
                   {...scaleIn}
                 >
+                  <div className="absolute -top-8 left-0 right-0 md:top-3 md:left-3 md:right-auto flex items-center gap-2">
+                    <span className="text-xs text-text-muted bg-black/60 px-3 py-1 rounded-full">
+                      {lightbox + 1} / {items.length}
+                    </span>
+                    <span className="hidden md:inline-block text-xs text-text-muted bg-black/60 px-3 py-1 rounded-full">
+                      ← → to navigate
+                    </span>
+                  </div>
                   <button
                     type="button"
                     onClick={closeLightbox}
@@ -131,6 +139,30 @@ export function ScreenshotGallery({
                     alt={items[lightbox].alt}
                     className="w-full max-h-[80vh] object-contain rounded-xl border border-border shadow-[var(--shadow-lift)] bg-surface"
                   />
+                  {items.length > 1 && (
+                    <div className="mt-4 flex gap-2 overflow-x-auto pb-2 justify-center">
+                      {items.map((item, index) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setLightbox(index)}
+                          className={cn(
+                            'relative h-12 w-16 flex-shrink-0 rounded-lg border transition-all overflow-hidden',
+                            lightbox === index
+                              ? 'border-primary ring-2 ring-primary/50'
+                              : 'border-border/50 hover:border-border',
+                          )}
+                          aria-label={`Go to image ${index + 1}`}
+                        >
+                          <img
+                            src={item.src}
+                            alt={item.alt}
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               </motion.div>
             )}
