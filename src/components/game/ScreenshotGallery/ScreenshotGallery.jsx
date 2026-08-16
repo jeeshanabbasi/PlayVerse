@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Download, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
 import { cn, fadeIn, scaleIn } from '@utils/index';
 import { useLockBodyScroll } from '@hooks/index';
 
@@ -26,10 +26,59 @@ export function ScreenshotGallery({
   const items = normalizeScreenshots(screenshots);
   const [selected, setSelected] = useState(0);
   const [lightbox, setLightbox] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   useLockBodyScroll(lightbox != null);
 
-  const closeLightbox = useCallback(() => setLightbox(null), []);
+  const closeLightbox = useCallback(() => {
+    setLightbox(null);
+    setZoom(1);
+    setIsFullscreen(false);
+  }, []);
+
+  const handleDownload = useCallback(() => {
+    if (lightbox == null) return;
+    const img = items[lightbox];
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.download = img.alt || `screenshot-${lightbox + 1}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, [lightbox, items]);
+
+  const handleZoom = useCallback((direction) => {
+    setZoom((prev) => {
+      const newZoom = direction === 'in' ? prev + 0.25 : Math.max(1, prev - 0.25);
+      return Math.min(3, newZoom);
+    });
+  }, []);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX.current - touchEndX;
+    const diffY = Math.abs(touchStartY.current - touchEndY);
+
+    if (Math.abs(diffX) > 50 && diffY < 50) {
+      if (diffX > 0) {
+        setLightbox((current) => (current == null ? 0 : (current + 1) % items.length));
+      } else {
+        setLightbox((current) =>
+          current == null ? 0 : (current - 1 + items.length) % items.length,
+        );
+      }
+      setZoom(1);
+    }
+  }, [items.length]);
 
   useEffect(() => {
     if (lightbox == null) return undefined;
