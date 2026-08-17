@@ -90,19 +90,37 @@ export function ScreenshotGallery({
       }
       if (event.key === 'ArrowRight') {
         event.preventDefault();
+        setZoom(1);
         setLightbox((current) => (current == null ? 0 : (current + 1) % items.length));
       }
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
+        setZoom(1);
         setLightbox((current) =>
           current == null ? 0 : (current - 1 + items.length) % items.length,
         );
+      }
+      if (event.key === '+' || event.key === '=') {
+        event.preventDefault();
+        handleZoom('in');
+      }
+      if (event.key === '-') {
+        event.preventDefault();
+        handleZoom('out');
+      }
+      if (event.key === 'f') {
+        event.preventDefault();
+        setIsFullscreen((prev) => !prev);
+      }
+      if (event.key === 'd') {
+        event.preventDefault();
+        handleDownload();
       }
     }
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [lightbox, closeLightbox, items.length]);
+  }, [lightbox, closeLightbox, items.length, handleZoom, handleDownload]);
 
   if (!items.length) return null;
 
@@ -164,30 +182,82 @@ export function ScreenshotGallery({
                   onClick={closeLightbox}
                 />
                 <motion.div
-                  className="relative z-10 max-w-5xl w-full"
+                  className="relative z-10 w-full"
+                  style={{ maxWidth: isFullscreen ? '100%' : 'max(90vw, 320px)' }}
                   {...scaleIn}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
                 >
-                  <div className="absolute -top-8 left-0 right-0 md:top-3 md:left-3 md:right-auto flex items-center gap-2">
+                  <div className="absolute -top-8 left-0 right-0 md:top-3 md:left-3 md:right-auto flex items-center gap-2 z-30 flex-wrap">
                     <span className="text-xs text-text-muted bg-black/60 px-3 py-1 rounded-full">
                       {lightbox + 1} / {items.length}
                     </span>
                     <span className="hidden md:inline-block text-xs text-text-muted bg-black/60 px-3 py-1 rounded-full">
-                      ← → to navigate
+                      ← → | +/- | F | D
                     </span>
                   </div>
+
+                  <div className="absolute top-3 right-14 md:right-20 z-20 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleZoom('in')}
+                      disabled={zoom >= 3}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 disabled:opacity-50 transition-colors"
+                      aria-label="Zoom in"
+                      title="Zoom in (+)"
+                    >
+                      <ZoomIn className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleZoom('out')}
+                      disabled={zoom <= 1}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 disabled:opacity-50 transition-colors"
+                      aria-label="Zoom out"
+                      title="Zoom out (-)"
+                    >
+                      <ZoomOut className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsFullscreen(!isFullscreen)}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 transition-colors"
+                      aria-label="Fullscreen"
+                      title="Fullscreen (F)"
+                    >
+                      <Maximize2 className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownload}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 transition-colors"
+                      aria-label="Download"
+                      title="Download (D)"
+                    >
+                      <Download className="w-5 h-5" />
+                    </button>
+                  </div>
+
                   <button
                     type="button"
                     onClick={closeLightbox}
-                    className="absolute -top-2 -right-2 md:top-3 md:right-3 z-20 inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 transition-colors"
+                    className="absolute -top-2 -right-2 md:top-3 md:right-3 z-40 inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/60 border border-white/10 text-text hover:bg-black/80 transition-colors"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5" aria-hidden="true" />
                   </button>
-                  <img
-                    src={items[lightbox].src}
-                    alt={items[lightbox].alt}
-                    className="w-full max-h-[80vh] object-contain rounded-xl border border-border shadow-[var(--shadow-lift)] bg-surface"
-                  />
+
+                  <div className="overflow-hidden rounded-xl border border-border shadow-[var(--shadow-lift)]">
+                    <img
+                      src={items[lightbox].src}
+                      alt={items[lightbox].alt}
+                      className={cn(
+                        'w-full bg-surface transition-transform duration-300 object-contain',
+                        isFullscreen ? 'h-screen' : 'max-h-[80vh]',
+                      )}
+                      style={{ transform: `scale(${zoom})` }}
+                    />
+                  </div>
                   {items.length > 1 && (
                     <div className="mt-4 flex gap-2 overflow-x-auto pb-2 justify-center">
                       {items.map((item, index) => (
