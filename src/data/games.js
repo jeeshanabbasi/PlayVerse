@@ -212,7 +212,7 @@ export const gamesCatalog = [
   {
     id: 'space-shooter',
     title: 'Space Shooter',
-    image: 'https://images.unsplash.com/photo-1542401886-65d27afba266?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=800&q=80',
     genres: ['Arcade', 'Action'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -243,7 +243,7 @@ export const gamesCatalog = [
   {
     id: 'cyber-boss',
     title: 'Cyber Boss: Overlord Zero',
-    image: 'https://images.unsplash.com/photo-1538481199705-c710c4ea671b?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
     genres: ['Action', 'Arcade', 'Boss Battle'],
     platforms: ['web'],
     difficulty: 'Hard',

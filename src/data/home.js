@@ -6,7 +6,7 @@ export const heroData = {
   heading: 'Explore Infinite Worlds',
   subtitle:
     'Discover thousands of browser games, compete with friends, and experience next-generation gaming.',
-  backgroundImage: img('photo-1516975080664-ed2fc6a32937', 1920),
+  backgroundImage: 'https://images.unsplash.com/photo-1538481199705-c710c4ea671b?auto=format&fit=crop&w=1920&q=80',
   backgroundVideo: null,
   ctaPrimary: { label: 'Play Now', href: '/games' },
   ctaSecondary: { label: 'Browse Games', href: '/discover' },
@@ -18,8 +18,8 @@ export const featuredGame = {
   tagline: 'The legendary block-stacking classic.',
   description:
     'Experience the timeless puzzle game that defined a generation. Stack blocks, clear lines, and achieve high scores in this endless arcade challenge.',
-  cover: img('photo-1511882150382-421056c89033', 1400),
-  banner: img('photo-1511882150382-421056c89033', 1600),
+  cover: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1400&q=80',
+  banner: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1600&q=80',
   rating: 4.9,
   reviewCount: '68k',
   genres: ['Arcade', 'Puzzle', 'Retro'],
