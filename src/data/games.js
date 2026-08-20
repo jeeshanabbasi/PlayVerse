@@ -32,11 +32,13 @@ export const STATUS_FILTER_OPTIONS = [
   { value: 'any', label: 'Any status' },
 ];
 
+const gameImage = (name) => `/games/${name}.jpg`;
+
 export const gamesCatalog = [
   {
     id: 'snake',
     title: 'Snake',
-    image: 'https://images.unsplash.com/photo-1579373903781-fd5c0e09a2d9?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('snake'),
     genres: ['Arcade', 'Retro'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -52,7 +54,7 @@ export const gamesCatalog = [
   {
     id: 'tic-tac-toe',
     title: 'Tic Tac Toe',
-    image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('tictactoe'),
     genres: ['Strategy', 'Puzzle'],
     platforms: ['web'],
     difficulty: 'Easy',
@@ -68,7 +70,7 @@ export const gamesCatalog = [
   {
     id: 'memory-game',
     title: 'Memory Game',
-    image: 'https://images.unsplash.com/photo-1570303008389-8f8424e1bbd4?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('memory'),
     genres: ['Puzzle', 'Casual'],
     platforms: ['web'],
     difficulty: 'Easy',
@@ -84,7 +86,7 @@ export const gamesCatalog = [
   {
     id: '2048',
     title: '2048',
-    image: 'https://images.unsplash.com/photo-1526374965328-7f5ae4e8b08e?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('2048'),
     genres: ['Puzzle', 'Strategy'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -100,7 +102,7 @@ export const gamesCatalog = [
   {
     id: 'minesweeper',
     title: 'Minesweeper',
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('minesweeper'),
     genres: ['Strategy', 'Puzzle'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -116,7 +118,7 @@ export const gamesCatalog = [
   {
     id: 'sudoku',
     title: 'Sudoku',
-    image: 'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('sudoku'),
     genres: ['Puzzle', 'Strategy'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -132,7 +134,7 @@ export const gamesCatalog = [
   {
     id: 'tetris',
     title: 'Tetris',
-    image: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('tetris'),
     genres: ['Arcade', 'Retro'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -148,7 +150,7 @@ export const gamesCatalog = [
   {
     id: 'flappy-bird',
     title: 'Flappy Bird',
-    image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('flappybird'),
     genres: ['Arcade', 'Casual'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -164,7 +166,7 @@ export const gamesCatalog = [
   {
     id: 'pong',
     title: 'Pong (2-Player Versus)',
-    image: 'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('pong'),
     genres: ['Arcade', 'Retro', '2-Player'],
     platforms: ['web'],
     difficulty: 'Easy',
@@ -180,7 +182,7 @@ export const gamesCatalog = [
   {
     id: 'breakout',
     title: 'Breakout',
-    image: 'https://images.unsplash.com/photo-1559383331-cd4628902d4a?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('breakout'),
     genres: ['Arcade', 'Retro'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -196,7 +198,7 @@ export const gamesCatalog = [
   {
     id: 'dino-run',
     title: 'Dino Run',
-    image: 'https://images.unsplash.com/photo-1600744222538-49ee1be9cf16?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('breakout'),
     genres: ['Arcade', 'Retro'],
     platforms: ['web'],
     difficulty: 'Easy',
@@ -212,7 +214,7 @@ export const gamesCatalog = [
   {
     id: 'space-shooter',
     title: 'Space Shooter',
-    image: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('breakout'),
     genres: ['Arcade', 'Action'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -227,7 +229,7 @@ export const gamesCatalog = [
   {
     id: 'space-invaders',
     title: 'Space Invaders',
-    image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd219f90?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('tetris'),
     genres: ['Arcade', 'Action', 'Retro'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -243,7 +245,7 @@ export const gamesCatalog = [
   {
     id: 'cyber-boss',
     title: 'Cyber Boss: Overlord Zero',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('2048'),
     genres: ['Action', 'Arcade', 'Boss Battle'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -262,14 +264,14 @@ export const recentlyPlayedGames = [
   {
     id: 'snake',
     title: 'Snake',
-    image: 'https://images.unsplash.com/photo-1579373903781-fd5c0e09a2d9?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('snake'),
     genres: ['Arcade', 'Retro'],
     lastPlayed: '2 hours ago',
   },
   {
     id: 'tic-tac-toe',
     title: 'Tic Tac Toe',
-    image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=80',
+    image: gameImage('tictactoe'),
     genres: ['Strategy', 'Puzzle'],
     lastPlayed: 'Yesterday',
   },

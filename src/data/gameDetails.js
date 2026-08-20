@@ -154,7 +154,7 @@ function buildDetail(game, index) {
 
   const screenshots = Array.from({ length: 6 }, (_, i) => ({
     id: `${slug}-shot-${i + 1}`,
-    src: img(unsplash[(n + i) % unsplash.length], 1600),
+    src: game.image,
     alt: `${game.title} screenshot ${i + 1}`,
   }));
 
@@ -207,7 +207,7 @@ function buildDetail(game, index) {
     ...game,
     slug,
     titleSlug,
-    banner: img(unsplash[n % unsplash.length], 1920),
+    banner: game.image,
     logo: game.image,
     developer: pick(DEVELOPERS, n, 10),
     publisher: pick(PUBLISHERS, n, 12),
@@ -230,7 +230,7 @@ Built by ${pick(DEVELOPERS, n, 10)} and published under ${pick(PUBLISHERS, n, 12
     offline: hash(n + 19) > 0.55,
     trailer: {
       title: `${game.title} Official Trailer`,
-      thumbnail: img(unsplash[(n + 3) % unsplash.length], 1600),
+      thumbnail: game.image,
       duration: 95 + Math.floor(hash(n + 20) * 80),
       src: null,
     },
