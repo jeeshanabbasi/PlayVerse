@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Menu, X, Settings } from 'lucide-react';
+import { Menu, Moon, Sun, X, Settings } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
 import { NavList } from '@components/layout/Navigation';
 import { NAV_ITEMS } from '@constants/navigation';
 import { playUiClick, playUiTick } from '@utils/index';
+import { useTheme } from '@context/index';
 
 export function Header({ onSettingsClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
   const closeMobile = () => setMobileOpen(false);
 
   return (
@@ -22,6 +24,20 @@ export function Header({ onSettingsClick }) {
               className="hidden md:flex"
             />
             
+            <button
+              type="button"
+              onClick={() => {
+                playUiClick();
+                toggleTheme();
+              }}
+              onMouseEnter={playUiTick}
+              className="p-2 rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-border-hover transition-colors cursor-pointer"
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
+            </button>
+
             <button
               type="button"
               onClick={() => {
