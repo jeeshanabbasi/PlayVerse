@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { History, Menu, Moon, Play, Sun, X, Settings } from 'lucide-react';
+import { History, Menu, Moon, Play, Sun, X, Settings, Trash2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
 import { NavList } from '@components/layout/Navigation';
@@ -32,6 +32,12 @@ export function Header({ onSettingsClick }) {
       }
     }
     setHistoryOpen((current) => !current);
+  };
+
+  const clearHistory = () => {
+    playUiClick();
+    localStorage.removeItem('playverse_history');
+    setRecentGames([]);
   };
 
   return (
@@ -69,7 +75,19 @@ export function Header({ onSettingsClick }) {
                   >
                     <div className="mb-2 flex items-center justify-between px-1">
                       <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Recently Played</p>
-                      <History className="h-3.5 w-3.5 text-primary" />
+                      {recentGames.length > 0 ? (
+                        <button
+                          type="button"
+                          onClick={clearHistory}
+                          className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[10px] font-bold uppercase tracking-wider text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+                          title="Clear recently played games"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                          Clear
+                        </button>
+                      ) : (
+                        <History className="h-3.5 w-3.5 text-primary" />
+                      )}
                     </div>
 
                     {recentGames.length > 0 ? (
