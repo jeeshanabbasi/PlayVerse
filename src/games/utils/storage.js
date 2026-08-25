@@ -17,6 +17,7 @@ function readJson(storageKey, fallback) {
 function writeJson(storageKey, value) {
   try {
     localStorage.setItem(storageKey, JSON.stringify(value));
+    window.dispatchEvent(new Event('playverse_stats_updated'));
   } catch {
     // Storage quota / private mode — fail silently
   }
