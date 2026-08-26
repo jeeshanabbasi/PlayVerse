@@ -5,6 +5,7 @@ import { HeroSection } from './sections/HeroSection';
 import { FeaturedSection } from './sections/FeaturedSection';
 import { ContinuePlayingSection } from './sections/ContinuePlayingSection';
 import { LeaderboardSection } from './sections/LeaderboardSection';
+import { DailyChallengeSection } from './sections/DailyChallengeSection';
 import { AchievementsHub } from '@components/game';
 
 function HomePageComponent() {
@@ -20,6 +21,7 @@ function HomePageComponent() {
       
       <div className="container-app flex flex-col gap-12 md:gap-16">
         <AchievementsHub />
+        <DailyChallengeSection />
         <FeaturedSection />
         <ContinuePlayingSection />
         <LeaderboardSection />
