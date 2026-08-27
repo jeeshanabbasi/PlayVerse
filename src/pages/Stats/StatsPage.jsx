@@ -15,12 +15,23 @@ function readNumber(key) {
   }
 }
 
+function readAchievementCount(gameId) {
+  try {
+    const raw = localStorage.getItem(`${STORAGE_PREFIX}.${gameId}.achievements`);
+    const achievements = raw ? JSON.parse(raw) : [];
+    return Array.isArray(achievements) ? achievements.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
 function getStats() {
   const games = gamesCatalog.map((game) => ({
     ...game,
     playCount: readNumber(`${STORAGE_PREFIX}.${game.id}.playCount`),
     bestScore: readNumber(`${STORAGE_PREFIX}.${game.id}.highScore`),
     lastPlayed: readNumber(`${STORAGE_PREFIX}.${game.id}.lastPlayed`),
+    achievements: readAchievementCount(game.id),
   }));
   const playedGames = games.filter((game) => game.playCount > 0);
   const genreCounts = playedGames.reduce((counts, game) => {
@@ -30,6 +41,9 @@ function getStats() {
     return counts;
   }, {});
   const favoriteGenre = Object.entries(genreCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Not yet';
+  const mostPlayed = [...games].sort((a, b) => b.playCount - a.playCount)[0];
+  const lastActive = Math.max(0, ...games.map((game) => game.lastPlayed));
+  const xp = games.reduce((total, game) => total + game.playCount * 25 + game.achievements * 100, 0);
 
   return {
     games,
@@ -37,6 +51,10 @@ function getStats() {
     totalSessions: games.reduce((total, game) => total + game.playCount, 0),
     bestScore: Math.max(0, ...games.map((game) => game.bestScore)),
     favoriteGenre,
+    mostPlayed: mostPlayed?.playCount ? mostPlayed.title : 'Not yet',
+    lastActive,
+    xp,
+    level: Math.floor(xp / 500) + 1,
   };
 }
 
@@ -86,7 +104,7 @@ function StatsPageComponent() {
           <p className="text-label text-primary">Your Play Profile</p>
           <h1 className="text-display-lg font-bold tracking-tight text-text">Game Statistics</h1>
           <p className="text-body-lg text-text-secondary">
-            A quick view of your local PlayVerse activity and best runs.
+            Level {stats.level} profile · {stats.xp.toLocaleString('en-US')} XP earned from your runs.
           </p>
         </header>
 
@@ -95,6 +113,8 @@ function StatsPageComponent() {
           <StatCard icon={Clock3} label="Total Sessions" value={stats.totalSessions} detail="launches recorded" />
           <StatCard icon={Trophy} label="Best Score" value={stats.bestScore.toLocaleString('en-US')} detail="across all games" />
           <StatCard icon={BarChart3} label="Favorite Genre" value={stats.favoriteGenre} detail="based on sessions" />
+          <StatCard icon={Gamepad2} label="Most Played" value={stats.mostPlayed} detail="your go-to game" />
+          <StatCard icon={Clock3} label="Last Active" value={stats.lastActive ? new Date(stats.lastActive).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Not yet'} detail="latest game session" />
         </section>
 
         <section className="space-y-5">

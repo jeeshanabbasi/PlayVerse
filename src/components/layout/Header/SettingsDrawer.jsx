@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad, Sparkles } from 'lucide-react';
+import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad, Sparkles, Download, HeartOff } from 'lucide-react';
 import { cn, playUiTick, playUiClick, setMuteState, getMuteState } from '@utils/index';
 import { useToast } from '@context/index';
 
@@ -141,6 +141,30 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
         });
       }
     }
+  };
+
+  const handleClearFavorites = () => {
+    playUiClick();
+    localStorage.removeItem('playverse_favorites');
+    window.dispatchEvent(new Event('playverse_favorites_updated'));
+    addToast({ title: 'Favorites cleared', description: 'Your game shelf is empty now.', variant: 'success' });
+  };
+
+  const handleExportData = () => {
+    playUiClick();
+    const data = {};
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('playverse')) data[key] = localStorage.getItem(key);
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'playverse-progress.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    addToast({ title: 'Progress exported', description: 'Your local PlayVerse data is ready.', variant: 'success' });
   };
 
   return (
@@ -351,6 +375,14 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
 
             {/* Reset data block */}
             <div className="space-y-4 mt-8 pt-4 border-t border-border/40">
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" onClick={handleExportData} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface py-2.5 text-xs font-semibold text-text-secondary transition-colors hover:border-border-hover hover:text-text">
+                  <Download className="h-4 w-4" /> Export Progress
+                </button>
+                <button type="button" onClick={handleClearFavorites} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface py-2.5 text-xs font-semibold text-text-secondary transition-colors hover:border-border-hover hover:text-text">
+                  <HeartOff className="h-4 w-4" /> Clear Favorites
+                </button>
+              </div>
               <div className="flex gap-3 items-start p-4 rounded-xl bg-error/5 border border-error/20 text-left">
                 <ShieldAlert className="w-5 h-5 text-error shrink-0 mt-0.5" />
                 <div>

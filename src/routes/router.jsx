@@ -10,6 +10,7 @@ const PlayPage = lazy(() => import('@pages/Play'));
 const AboutPage = lazy(() => import('@pages/About'));
 const SearchPage = lazy(() => import('@pages/Search'));
 const StatsPage = lazy(() => import('@pages/Stats'));
+const FavoritesPage = lazy(() => import('@pages/Favorites'));
 const NotFoundPage = lazy(() => import('@pages/NotFound'));
 
 function RouteFallback() {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: 'stats',
         element: withSuspense(StatsPage),
+      },
+      {
+        path: 'favorites',
+        element: withSuspense(FavoritesPage),
       },
       {
         path: '*',

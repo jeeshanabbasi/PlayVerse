@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Header } from '@components/layout/Header';
+import { BottomNav } from '@components/layout/BottomNav';
+import { NAV_ITEMS } from '@constants/navigation';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
@@ -61,7 +63,7 @@ export function MainLayout() {
 
         <Header onSettingsClick={() => setSettingsOpen(true)} />
 
-        <main id="main-content" className="flex-1 flex flex-col min-w-0">
+        <main id="main-content" className="flex-1 flex flex-col min-w-0 pb-16 md:pb-0">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={location.pathname}
@@ -73,6 +75,10 @@ export function MainLayout() {
         </main>
 
         <Footer />
+        <BottomNav
+          items={NAV_ITEMS.filter((item) => ['home', 'games', 'stats', 'favorites'].includes(item.id))}
+          activeId={location.pathname === '/' ? 'home' : location.pathname.split('/')[1]}
+        />
         <CommandPalette />
         
         <SettingsDrawer

@@ -1,9 +1,10 @@
-import { Home, Gamepad2, Info, Search, BarChart3 } from 'lucide-react';
+import { Home, Gamepad2, Info, Search, BarChart3, Heart } from 'lucide-react';
 
 export const NAV_ITEMS = [
   { id: 'home', label: 'Home', path: '/', icon: Home },
   { id: 'games', label: 'Games', path: '/games', icon: Gamepad2 },
   { id: 'stats', label: 'Stats', path: '/stats', icon: BarChart3 },
+  { id: 'favorites', label: 'Favorites', path: '/favorites', icon: Heart },
   { id: 'search', label: 'Search', path: '/search', icon: Search },
   { id: 'about', label: 'About', path: '/about', icon: Info },
 ];

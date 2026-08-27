@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { CalendarDays, Flame, Play, TimerReset } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { gamesCatalog } from '@data/games';
@@ -21,9 +21,17 @@ export const DailyChallengeSection = memo(function DailyChallengeSection() {
   const { openGame } = useQuickPlay();
   const game = getDailyGame();
   const { hours, minutes, expired } = useCountdown(getNextReset());
+  const dateKey = new Date().toISOString().slice(0, 10);
+  const [attempted, setAttempted] = useState(() => localStorage.getItem(`playverse_daily_${dateKey}`) === 'true');
+
+  useEffect(() => {
+    setAttempted(localStorage.getItem(`playverse_daily_${dateKey}`) === 'true');
+  }, [dateKey]);
 
   const launchChallenge = () => {
     playUiClick();
+    localStorage.setItem(`playverse_daily_${dateKey}`, 'true');
+    setAttempted(true);
     openGame(game.id);
   };
 
@@ -63,7 +71,7 @@ export const DailyChallengeSection = memo(function DailyChallengeSection() {
             className="btn-primary"
           >
             <Play className="h-4 w-4 fill-current" aria-hidden="true" />
-            Play Challenge
+            {attempted ? 'Play Again' : 'Play Challenge'}
           </button>
         </div>
 
@@ -76,7 +84,7 @@ export const DailyChallengeSection = memo(function DailyChallengeSection() {
               <TimerReset className="h-5 w-5 text-accent" aria-hidden="true" />
               {expired ? '00h 00m' : `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`}
             </p>
-            <p className="text-sm text-text-secondary">Your best score is saved automatically.</p>
+            <p className="text-sm text-text-secondary">{attempted ? 'Attempt logged today. Beat your best score.' : "Your first attempt starts today's streak."}</p>
           </div>
         </div>
       </div>
