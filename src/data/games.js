@@ -198,7 +198,7 @@ export const gamesCatalog = [
   {
     id: 'dino-run',
     title: 'Dino Run',
-    image: gameImage('breakout'),
+    image: gameImage('dinorun'),
     genres: ['Arcade', 'Retro'],
     platforms: ['web'],
     difficulty: 'Easy',
@@ -214,7 +214,7 @@ export const gamesCatalog = [
   {
     id: 'space-shooter',
     title: 'Space Shooter',
-    image: gameImage('breakout'),
+    image: gameImage('spaceshooter'),
     genres: ['Arcade', 'Action'],
     platforms: ['web'],
     difficulty: 'Hard',
@@ -229,7 +229,7 @@ export const gamesCatalog = [
   {
     id: 'space-invaders',
     title: 'Space Invaders',
-    image: gameImage('tetris'),
+    image: gameImage('spaceinvaders'),
     genres: ['Arcade', 'Action', 'Retro'],
     platforms: ['web'],
     difficulty: 'Medium',
@@ -245,7 +245,7 @@ export const gamesCatalog = [
   {
     id: 'cyber-boss',
     title: 'Cyber Boss: Overlord Zero',
-    image: gameImage('2048'),
+    image: gameImage('cyberboss'),
     genres: ['Action', 'Arcade', 'Boss Battle'],
     platforms: ['web'],
     difficulty: 'Hard',
