@@ -7,6 +7,7 @@ import { ContinuePlayingSection } from './sections/ContinuePlayingSection';
 import { LeaderboardSection } from './sections/LeaderboardSection';
 import { DailyChallengeSection } from './sections/DailyChallengeSection';
 import { ActivityFeedSection } from './sections/ActivityFeedSection';
+import { QuestBoardSection } from './sections/QuestBoardSection';
 import { AchievementsHub } from '@components/game';
 
 function HomePageComponent() {
@@ -24,6 +25,7 @@ function HomePageComponent() {
         <AchievementsHub />
         <DailyChallengeSection />
         <ActivityFeedSection />
+        <QuestBoardSection />
         <FeaturedSection />
         <ContinuePlayingSection />
         <LeaderboardSection />

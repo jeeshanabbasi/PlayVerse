@@ -12,3 +12,4 @@ export { NewsSection } from './NewsSection';
 export { NewsletterSection } from './NewsletterSection';
 export { DailyChallengeSection } from './DailyChallengeSection';
 export { ActivityFeedSection } from './ActivityFeedSection';
+export { QuestBoardSection } from './QuestBoardSection';
