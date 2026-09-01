@@ -8,7 +8,7 @@ import { LeaderboardSection } from './sections/LeaderboardSection';
 import { DailyChallengeSection } from './sections/DailyChallengeSection';
 import { ActivityFeedSection } from './sections/ActivityFeedSection';
 import { QuestBoardSection } from './sections/QuestBoardSection';
-import { AchievementsHub } from '@components/game';
+import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
   return (
@@ -23,6 +23,7 @@ function HomePageComponent() {
       
       <div className="container-app flex flex-col gap-12 md:gap-16">
         <AchievementsHub />
+        <ProfileLevelCard />
         <DailyChallengeSection />
         <ActivityFeedSection />
         <QuestBoardSection />

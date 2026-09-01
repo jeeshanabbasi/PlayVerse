@@ -13,3 +13,4 @@ export { ScreenshotGallery } from './ScreenshotGallery';
 export { TrailerCard } from './TrailerCard';
 export { SystemRequirementsCard } from './SystemRequirementsCard';
 export { AchievementsHub } from './AchievementsHub/AchievementsHub';
+export { ProfileLevelCard } from './ProfileLevelCard';
