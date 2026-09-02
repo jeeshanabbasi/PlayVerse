@@ -1,6 +1,7 @@
-import { memo, useMemo, useState, useEffect } from 'react';
+import { memo, useMemo, useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Flame, Gift, Rocket, Trophy } from 'lucide-react';
+import { useToast } from '@context/index';
 import { gamesCatalog } from '@data/games';
 
 const STORAGE_KEY = 'playverse_quest_claims';
@@ -84,6 +85,8 @@ const QUEST_DEFS = [
 
 export const QuestBoardSection = memo(function QuestBoardSection() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const { success } = useToast();
+  const completedRef = useRef(new Set());
 
   useEffect(() => {
     const handleRefresh = () => setRefreshKey((value) => value + 1);
@@ -117,6 +120,15 @@ export const QuestBoardSection = memo(function QuestBoardSection() {
     });
   }, [refreshKey]);
 
+  useEffect(() => {
+    quests.forEach((quest) => {
+      if (quest.isComplete && !completedRef.current.has(quest.id)) {
+        completedRef.current.add(quest.id);
+        success('Quest complete!', `${quest.title} is ready to claim for ${quest.reward}.`);
+      }
+    });
+  }, [quests, success]);
+
   const claimQuest = (questId) => {
     const claimed = new Set(readStorageValue(STORAGE_KEY, []));
     if (claimed.has(questId)) return;
@@ -126,6 +138,7 @@ export const QuestBoardSection = memo(function QuestBoardSection() {
 
     claimed.add(questId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...claimed]));
+    success('Reward claimed!', `${quest.title} redeemed for ${quest.reward}.`);
     window.dispatchEvent(new Event('playverse_stats_updated'));
     setRefreshKey((value) => value + 1);
   };
