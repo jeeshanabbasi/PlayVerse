@@ -9,6 +9,7 @@ import { DailyChallengeSection } from './sections/DailyChallengeSection';
 import { ActivityFeedSection } from './sections/ActivityFeedSection';
 import { QuestBoardSection } from './sections/QuestBoardSection';
 import { WeeklyChallengesSection } from './sections/WeeklyChallengesSection';
+import { RewardVaultSection } from './sections/RewardVaultSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -29,6 +30,7 @@ function HomePageComponent() {
         <ActivityFeedSection />
         <QuestBoardSection />
         <WeeklyChallengesSection />
+        <RewardVaultSection />
         <FeaturedSection />
         <ContinuePlayingSection />
         <LeaderboardSection />
