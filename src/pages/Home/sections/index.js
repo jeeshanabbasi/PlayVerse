@@ -15,3 +15,4 @@ export { ActivityFeedSection } from './ActivityFeedSection';
 export { QuestBoardSection } from './QuestBoardSection';
 export { WeeklyChallengesSection } from './WeeklyChallengesSection';
 export { RewardVaultSection } from './RewardVaultSection';
+export { SeasonalPassSection } from './SeasonalPassSection';
