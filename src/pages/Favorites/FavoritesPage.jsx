@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, Gamepad2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Container } from '@components/layout';
@@ -36,7 +37,7 @@ function FavoritesPageComponent() {
             icon={Heart}
             title="No favorites yet"
             description="Tap the heart on any game card and it will appear in your collection."
-            action={<a href="/games" className="btn-primary"><Gamepad2 className="h-4 w-4" /> Browse Games</a>}
+            action={<Link to="/games" className="btn-primary"><Gamepad2 className="h-4 w-4" /> Browse Games</Link>}
           />
         )}
       </Container>

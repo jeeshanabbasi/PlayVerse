@@ -7,7 +7,7 @@ import { NAV_ITEMS } from '@constants/navigation';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
-import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal } from '@components/common';
+import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal, QuickRollDock } from '@components/common';
 import { useKonamiCode } from '@hooks/index';
 
 export function MainLayout() {
@@ -93,6 +93,7 @@ export function MainLayout() {
 
         <ArcadeScreensaver />
         <TrophyCelebrationModal />
+        <QuickRollDock />
       </div>
     </QuickPlayProvider>
   );

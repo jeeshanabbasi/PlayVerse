@@ -9,3 +9,4 @@ export { SurpriseMeModal } from './SurpriseMe/SurpriseMeModal';
 export { ArcadeScreensaver } from './Screensaver/ArcadeScreensaver';
 export { CyberWarpOverlay } from './WarpTunnel/CyberWarpOverlay';
 export { TrophyCelebrationModal } from './TrophyCelebration/TrophyCelebrationModal';
+export { QuickRollDock } from './QuickRollDock/QuickRollDock';
