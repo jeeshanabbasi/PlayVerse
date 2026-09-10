@@ -5,11 +5,42 @@ import { gamesCatalog } from '@data/games';
 import { createGameStorage } from '@games/utils/storage';
 import { staggerContainer, staggerItem } from '@utils/index';
 
-const MOCK_BOTS = [
-  { name: 'PixelKing 👑', scoreMultiplier: 1.6 },
-  { name: 'ArcadeQueen 👾', scoreMultiplier: 1.1 },
-  { name: 'RetroBot 🤖', scoreMultiplier: 0.6 },
-];
+const LOCAL_BEST_SCORE_KEY = 'playverse_local_rankings';
+
+function readJson(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    const parsed = raw ? JSON.parse(raw) : fallback;
+    return parsed ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function getNormalizedRankings(gameId, userName, userScore, snapshot) {
+  const userEntry = {
+    name: userName,
+    score: Math.max(0, Number(userScore) || 0),
+    isUser: true,
+  };
+
+  const persisted = Array.isArray(snapshot[gameId]) ? snapshot[gameId] : [];
+  const merged = [...persisted, userEntry]
+    .filter((entry) => entry && typeof entry.name === 'string' && Number.isFinite(Number(entry.score)))
+    .map((entry) => ({
+      name: entry.name,
+      score: Math.max(0, Number(entry.score) || 0),
+      isUser: Boolean(entry.isUser),
+    }))
+    .filter((entry, index, array) => array.findIndex((item) => item.name === entry.name) === index)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  const nextSnapshot = { ...snapshot, [gameId]: merged };
+  localStorage.setItem(LOCAL_BEST_SCORE_KEY, JSON.stringify(nextSnapshot));
+
+  return merged;
+}
 
 function LeaderboardSectionComponent() {
   const [profile, setProfile] = useState(() => {
@@ -40,12 +71,16 @@ function LeaderboardSectionComponent() {
       } catch {}
     };
     window.addEventListener('playverse_profile_updated', handleProfileUpdate);
-    return () => window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+    window.addEventListener('playverse_stats_updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('playverse_profile_updated', handleProfileUpdate);
+      window.removeEventListener('playverse_stats_updated', handleProfileUpdate);
+    };
   }, []);
 
   const leaderboardData = useMemo(() => {
     const scoringGames = gamesCatalog.filter((game) =>
-      ['snake', 'tetris', 'breakout', 'pong', 'twenty-forty-eight', 'flappy-bird', 'dino-run', 'space-shooter'].includes(game.id)
+      ['snake', 'tetris', 'breakout', 'pong', 'flappy-bird', 'dino-run', 'space-shooter', '2048'].includes(game.id)
     );
 
     return scoringGames.map((game) => {
@@ -57,33 +92,17 @@ function LeaderboardSectionComponent() {
         userScore = 0;
       }
 
-      const targetBase = game.id === 'tetris' ? 500 : game.id === 'twenty-forty-eight' ? 2048 : game.id === 'snake' ? 120 : 60;
-
-      const list = [
-        ...MOCK_BOTS.map((bot) => ({
-          name: bot.name,
-          score: Math.round(targetBase * bot.scoreMultiplier),
-          isUser: false,
-        })),
-        {
-          name: `You (${profile.avatar} ${profile.nickname})`,
-          score: userScore,
-          isUser: true,
-        },
-      ];
-
-      list.sort((a, b) => b.score - a.score);
-
-      const userRank = list.findIndex((item) => item.isUser) + 1;
+      const profileName = `You (${profile.avatar} ${profile.nickname})`;
+      const snapshot = readJson(LOCAL_BEST_SCORE_KEY, {});
+      const rankings = getNormalizedRankings(game.id, profileName, userScore, snapshot);
+      const userRank = rankings.findIndex((item) => item.isUser) + 1;
 
       return {
         gameId: game.id,
         gameTitle: game.title,
-        gameImage: game.image,
-        userScore,
+        userScore: Number(userScore) || 0,
         userRank,
-        topScore: list[0].score,
-        rankings: list.slice(0, 4),
+        rankings,
       };
     });
   }, [profile]);
@@ -96,7 +115,7 @@ function LeaderboardSectionComponent() {
           <span>Arcade Hall of Fame</span>
         </h2>
         <p className="text-body-md text-text-secondary">
-          Compare your real game records against simulated AI bot competitors.
+          Your real local high scores ranked against nearby challenge rivals.
         </p>
       </div>
 
@@ -119,7 +138,7 @@ function LeaderboardSectionComponent() {
               </div>
               <div className="text-left min-w-0">
                 <h3 className="text-sm font-bold text-text truncate">{board.gameTitle}</h3>
-                <p className="text-[10px] text-text-muted">High Score Leaderboard</p>
+                <p className="text-[10px] text-text-muted">Local rankings</p>
               </div>
             </div>
 
@@ -163,7 +182,7 @@ function LeaderboardSectionComponent() {
               <span className="text-text-secondary">Your Rank:</span>
               <span className="font-bold flex items-center gap-1 text-primary">
                 <Star className="w-3.5 h-3.5 fill-current" />
-                <span>#{board.userRank}</span>
+                <span>#{board.userRank || '—'}</span>
               </span>
             </div>
           </motion.div>

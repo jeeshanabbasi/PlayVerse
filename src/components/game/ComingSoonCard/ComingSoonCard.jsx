@@ -1,4 +1,4 @@
-import { Calendar, Bell } from 'lucide-react';
+import { Calendar, Bell, CheckCircle2 } from 'lucide-react';
 import { cn } from '@utils/index';
 
 export function ComingSoonCard({
@@ -7,6 +7,7 @@ export function ComingSoonCard({
   date,
   onNotify,
   className,
+  isNotified = false,
 }) {
   return (
     <article
@@ -45,10 +46,19 @@ export function ComingSoonCard({
         <button
           type="button"
           onClick={onNotify}
-          className="inline-flex w-full items-center justify-center gap-2 h-10 px-4 rounded-xl text-sm font-medium text-text bg-surface-hover border border-border hover:border-border-hover hover:bg-surface-elevated transition-colors duration-200"
+          className={cn(
+            'inline-flex w-full items-center justify-center gap-2 h-10 px-4 rounded-xl text-sm font-medium transition-colors duration-200',
+            isNotified
+              ? 'bg-success/10 text-success border border-success/30 hover:bg-success/15'
+              : 'text-text bg-surface-hover border border-border hover:border-border-hover hover:bg-surface-elevated',
+          )}
         >
-          <Bell className="w-4 h-4 text-accent" aria-hidden="true" />
-          Notify me
+          {isNotified ? (
+            <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
+          ) : (
+            <Bell className="w-4 h-4 text-accent" aria-hidden="true" />
+          )}
+          {isNotified ? 'Reminder saved' : 'Notify me'}
         </button>
       </div>
     </article>
