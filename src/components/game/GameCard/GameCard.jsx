@@ -149,6 +149,10 @@ function GameCardComponent({
         {/* Card Details */}
         <div className="flex flex-col flex-1 p-4 gap-3">
           <div className="min-w-0">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              Browser Ready
+            </div>
             <h3 className="text-heading-md text-text truncate group-hover:text-primary transition-colors">
               {title}
             </h3>
@@ -157,7 +161,6 @@ function GameCardComponent({
             </p>
           </div>
 
-          {/* Apple-style primary play button */}
           <Link
             to={`/play/${slug}`}
             onClick={handlePlayClick}
@@ -165,7 +168,7 @@ function GameCardComponent({
             className="btn-primary mt-auto w-full justify-center text-body-sm py-2.5 shadow-[var(--shadow-soft)]"
           >
             <Play className="h-4 w-4 fill-current mr-1.5" />
-            <span>Play</span>
+            <span>Play in Browser</span>
           </Link>
         </div>
       </motion.div>

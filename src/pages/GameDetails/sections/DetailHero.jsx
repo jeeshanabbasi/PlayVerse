@@ -103,6 +103,10 @@ export const DetailHero = memo(function DetailHero({ game }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-accent/20 bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent backdrop-blur-md">
+              <Shield className="h-3.5 w-3.5" aria-hidden="true" />
+              Free browser game
+            </span>
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface/70 px-2.5 py-1 text-xs font-medium text-text-secondary backdrop-blur-md">
               <Shield className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
               Age {game.ageRating}
@@ -115,7 +119,7 @@ export const DetailHero = memo(function DetailHero({ game }) {
               magnetic
               onClick={() => navigate(`/play/${game.slug}`)}
             >
-              Play Now
+              Play in Browser
             </PlayButton>
             <WishlistButton
               size="lg"
