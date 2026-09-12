@@ -58,6 +58,7 @@ export const ComingSoonSection = memo(function ComingSoonSection() {
 
       setReminders(next);
       localStorage.setItem(REMINDER_KEY, JSON.stringify([...next]));
+      window.dispatchEvent(new Event('playverse_notifications_updated'));
     },
     [reminders, success, info],
   );

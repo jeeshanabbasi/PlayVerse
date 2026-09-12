@@ -7,6 +7,7 @@ import { NAV_ITEMS } from '@constants/navigation';
 import { playUiClick, playUiTick } from '@utils/index';
 import { useQuickPlay, useTheme } from '@context/index';
 import { gamesCatalog } from '@data/games';
+import { NotificationCenter } from '@components/common';
 
 export function Header({ onSettingsClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -123,6 +124,8 @@ export function Header({ onSettingsClick }) {
                 )}
               </AnimatePresence>
             </div>
+
+            <NotificationCenter />
             
             <button
               type="button"
