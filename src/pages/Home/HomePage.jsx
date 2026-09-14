@@ -12,6 +12,7 @@ import { WeeklyChallengesSection } from './sections/WeeklyChallengesSection';
 import { RewardVaultSection } from './sections/RewardVaultSection';
 import { SeasonalPassSection } from './sections/SeasonalPassSection';
 import { DailyBonusSection } from './sections/DailyBonusSection';
+import { RecommendedSection } from './sections/RecommendedSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -37,6 +38,7 @@ function HomePageComponent() {
         <SeasonalPassSection />
         <FeaturedSection />
         <ContinuePlayingSection />
+        <RecommendedSection />
         <LeaderboardSection />
       </div>
     </motion.div>
