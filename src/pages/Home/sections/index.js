@@ -9,3 +9,4 @@ export { WeeklyChallengesSection } from './WeeklyChallengesSection';
 export { RewardVaultSection } from './RewardVaultSection';
 export { SeasonalPassSection } from './SeasonalPassSection';
 export { DailyBonusSection } from './DailyBonusSection';
+export { TournamentSection } from './TournamentSection';
