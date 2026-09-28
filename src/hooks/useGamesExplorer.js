@@ -76,6 +76,7 @@ export function useGamesExplorer(source = gamesCatalog) {
   const [filters, setFilters] = useState(INITIAL_GAME_FILTERS);
   const [isLoading, setIsLoading] = useState(true);
   const [favUpdateKey, setFavUpdateKey] = useState(0);
+  const [statsUpdateKey, setStatsUpdateKey] = useState(0);
   const debouncedQuery = useDebounce(query, 280);
 
   useEffect(() => {
@@ -85,8 +86,13 @@ export function useGamesExplorer(source = gamesCatalog) {
 
   useEffect(() => {
     const handleFavUpdate = () => setFavUpdateKey((k) => k + 1);
+    const handleStatsUpdate = () => setStatsUpdateKey((key) => key + 1);
     window.addEventListener('playverse_favorites_updated', handleFavUpdate);
-    return () => window.removeEventListener('playverse_favorites_updated', handleFavUpdate);
+    window.addEventListener('playverse_stats_updated', handleStatsUpdate);
+    return () => {
+      window.removeEventListener('playverse_favorites_updated', handleFavUpdate);
+      window.removeEventListener('playverse_stats_updated', handleStatsUpdate);
+    };
   }, []);
 
   const setFilter = useCallback((key, value) => {
@@ -105,7 +111,9 @@ export function useGamesExplorer(source = gamesCatalog) {
   const results = useMemo(() => {
     const filtered = source.filter((game) => {
       if (!matchesSearch(game, debouncedQuery)) return false;
-      if (filters.genre === 'favorites') {
+      if (filters.genre === 'unplayed') {
+        if (Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) > 0) return false;
+      } else if (filters.genre === 'favorites') {
         try {
           const raw = localStorage.getItem('playverse_favorites');
           const favs = raw ? JSON.parse(raw) : [];
@@ -126,7 +134,7 @@ export function useGamesExplorer(source = gamesCatalog) {
     });
 
     return sortGames(filtered, filters.sort);
-  }, [source, debouncedQuery, filters, favUpdateKey]);
+  }, [source, debouncedQuery, filters, favUpdateKey, statsUpdateKey]);
 
   const hasActiveFilters = useMemo(() => {
     return (

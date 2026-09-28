@@ -13,6 +13,11 @@ export const GamesFilters = memo(function GamesFilters({
 
   const allFilters = [
     { label: 'All', value: 'all', count: gamesCatalog.length },
+    {
+      label: 'Not Played',
+      value: 'unplayed',
+      count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) === 0).length,
+    },
     { label: 'Favorites', value: 'favorites', count: favorites.length, isFav: true },
     ...GAME_GENRES.filter((g) => g.toLowerCase() !== 'all').map((g) => {
       const val = g.toLowerCase();
