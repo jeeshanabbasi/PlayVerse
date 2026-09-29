@@ -15,6 +15,7 @@ import { DailyBonusSection } from './sections/DailyBonusSection';
 import { RecommendedSection } from './sections/RecommendedSection';
 import { TournamentSection } from './sections/TournamentSection';
 import { QuickPickSection } from './sections/QuickPickSection';
+import { UnplayedSpotlightSection } from './sections/UnplayedSpotlightSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -32,6 +33,7 @@ function HomePageComponent() {
         <AchievementsHub />
         <ProfileLevelCard />
         <QuickPickSection />
+        <UnplayedSpotlightSection />
         <DailyBonusSection />
         <DailyChallengeSection />
         <ActivityFeedSection />
