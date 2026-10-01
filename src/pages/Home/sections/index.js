@@ -9,6 +9,3 @@ export { WeeklyChallengesSection } from './WeeklyChallengesSection';
 export { RewardVaultSection } from './RewardVaultSection';
 export { SeasonalPassSection } from './SeasonalPassSection';
 export { DailyBonusSection } from './DailyBonusSection';
-export { TournamentSection } from './TournamentSection';
-export { QuickPickSection } from './QuickPickSection';
-export { UnplayedSpotlightSection } from './UnplayedSpotlightSection';
