@@ -14,6 +14,7 @@ import { SeasonalPassSection } from './sections/SeasonalPassSection';
 import { DailyBonusSection } from './sections/DailyBonusSection';
 import { RecommendedSection } from './sections/RecommendedSection';
 import { CatalogProgressSection } from './sections/CatalogProgressSection';
+import { SessionStreakSection } from './sections/SessionStreakSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -31,6 +32,7 @@ function HomePageComponent() {
         <AchievementsHub />
         <ProfileLevelCard />
         <CatalogProgressSection />
+        <SessionStreakSection />
         <DailyBonusSection />
         <DailyChallengeSection />
         <ActivityFeedSection />

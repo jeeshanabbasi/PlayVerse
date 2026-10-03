@@ -10,3 +10,4 @@ export { RewardVaultSection } from './RewardVaultSection';
 export { SeasonalPassSection } from './SeasonalPassSection';
 export { DailyBonusSection } from './DailyBonusSection';
 export { CatalogProgressSection } from './CatalogProgressSection';
+export { SessionStreakSection } from './SessionStreakSection';
