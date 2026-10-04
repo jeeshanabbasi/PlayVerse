@@ -11,3 +11,4 @@ export { SeasonalPassSection } from './SeasonalPassSection';
 export { DailyBonusSection } from './DailyBonusSection';
 export { CatalogProgressSection } from './CatalogProgressSection';
 export { SessionStreakSection } from './SessionStreakSection';
+export { WeeklyMomentumSection } from './WeeklyMomentumSection';
