@@ -17,6 +17,7 @@ import { CatalogProgressSection } from './sections/CatalogProgressSection';
 import { SessionStreakSection } from './sections/SessionStreakSection';
 import { WeeklyMomentumSection } from './sections/WeeklyMomentumSection';
 import { FavoriteGenreSpotlightSection } from './sections/FavoriteGenreSpotlightSection';
+import { QuickResumeSection } from './sections/QuickResumeSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -33,6 +34,7 @@ function HomePageComponent() {
       <div className="container-app flex flex-col gap-12 md:gap-16">
         <AchievementsHub />
         <ProfileLevelCard />
+        <QuickResumeSection />
         <CatalogProgressSection />
         <FavoriteGenreSpotlightSection />
         <SessionStreakSection />
