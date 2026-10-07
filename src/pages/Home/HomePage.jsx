@@ -15,8 +15,6 @@ import { DailyBonusSection } from './sections/DailyBonusSection';
 import { RecommendedSection } from './sections/RecommendedSection';
 import { CatalogProgressSection } from './sections/CatalogProgressSection';
 import { SessionStreakSection } from './sections/SessionStreakSection';
-import { WeeklyMomentumSection } from './sections/WeeklyMomentumSection';
-import { FavoriteGenreSpotlightSection } from './sections/FavoriteGenreSpotlightSection';
 import { QuickResumeSection } from './sections/QuickResumeSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
@@ -36,16 +34,10 @@ function HomePageComponent() {
         <ProfileLevelCard />
         <QuickResumeSection />
         <CatalogProgressSection />
-        <FavoriteGenreSpotlightSection />
         <SessionStreakSection />
-        <WeeklyMomentumSection />
         <DailyBonusSection />
         <DailyChallengeSection />
-        <ActivityFeedSection />
         <QuestBoardSection />
-        <WeeklyChallengesSection />
-        <RewardVaultSection />
-        <SeasonalPassSection />
         <FeaturedSection />
         <ContinuePlayingSection />
         <RecommendedSection />
