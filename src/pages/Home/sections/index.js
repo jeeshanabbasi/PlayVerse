@@ -14,3 +14,4 @@ export { SessionStreakSection } from './SessionStreakSection';
 export { WeeklyMomentumSection } from './WeeklyMomentumSection';
 export { FavoriteGenreSpotlightSection } from './FavoriteGenreSpotlightSection';
 export { QuickResumeSection } from './QuickResumeSection';
+export { BestScoreSpotlightSection } from './BestScoreSpotlightSection';
