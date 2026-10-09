@@ -17,6 +17,7 @@ import { CatalogProgressSection } from './sections/CatalogProgressSection';
 import { SessionStreakSection } from './sections/SessionStreakSection';
 import { QuickResumeSection } from './sections/QuickResumeSection';
 import { BestScoreSpotlightSection } from './sections/BestScoreSpotlightSection';
+import { LastWeekWinsSection } from './sections/LastWeekWinsSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -35,6 +36,7 @@ function HomePageComponent() {
         <ProfileLevelCard />
         <QuickResumeSection />
         <BestScoreSpotlightSection />
+        <LastWeekWinsSection />
         <CatalogProgressSection />
         <SessionStreakSection />
         <DailyBonusSection />

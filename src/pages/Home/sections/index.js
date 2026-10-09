@@ -15,3 +15,4 @@ export { WeeklyMomentumSection } from './WeeklyMomentumSection';
 export { FavoriteGenreSpotlightSection } from './FavoriteGenreSpotlightSection';
 export { QuickResumeSection } from './QuickResumeSection';
 export { BestScoreSpotlightSection } from './BestScoreSpotlightSection';
+export { LastWeekWinsSection } from './LastWeekWinsSection';
