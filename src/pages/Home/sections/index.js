@@ -16,3 +16,4 @@ export { FavoriteGenreSpotlightSection } from './FavoriteGenreSpotlightSection';
 export { QuickResumeSection } from './QuickResumeSection';
 export { BestScoreSpotlightSection } from './BestScoreSpotlightSection';
 export { LastWeekWinsSection } from './LastWeekWinsSection';
+export { PlayTimeSummarySection } from './PlayTimeSummarySection';
