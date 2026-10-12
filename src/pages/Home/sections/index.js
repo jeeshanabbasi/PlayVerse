@@ -18,3 +18,4 @@ export { BestScoreSpotlightSection } from './BestScoreSpotlightSection';
 export { LastWeekWinsSection } from './LastWeekWinsSection';
 export { PlayTimeSummarySection } from './PlayTimeSummarySection';
 export { LuckyPickSection } from './LuckyPickSection';
+export { MoodMatchSection } from './MoodMatchSection';
