@@ -1,14 +1,44 @@
 import { memo, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Medal, Trophy, Star, Volume2, VolumeX } from 'lucide-react';
+import { Medal, Trophy, Star, Volume2, VolumeX, Play } from 'lucide-react';
 import { gamesCatalog } from '@data/games';
 import { resolvePlayableDefinition } from '@games';
 import { CircularProgress } from '@ui';
+import { useQuickPlay } from '@context/index';
 import { playUiClick, startAmbientSoundscape, stopAmbientSoundscape } from '@utils/index';
+
+function NextBadgePrompt({ badge, onPlay }) {
+  if (!badge) return null;
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <span className="text-xl" aria-hidden="true">{badge.icon ?? '🏅'}</span>
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">Next badge</p>
+          <p className="truncate text-sm font-semibold text-text">{badge.name}</p>
+          <p className="truncate text-xs text-text-secondary">
+            {badge.gameTitle} · {badge.progress}/{badge.total} unlocked
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => onPlay(badge.gameId)}
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-text transition hover:border-accent/40 hover:text-accent"
+        aria-label={`Play ${badge.gameTitle}`}
+      >
+        <Play className="h-3.5 w-3.5" aria-hidden="true" />
+        Play
+      </button>
+    </div>
+  );
+}
 
 function AchievementsHubComponent() {
   const [ambience, setAmbience] = useState(false);
   const [achievementsUpdateKey, setAchievementsUpdateKey] = useState(0);
+  const { openGame } = useQuickPlay();
   const [profile, setProfile] = useState(() => {
     try {
       const stored = localStorage.getItem('playverse_profile');
@@ -60,6 +90,7 @@ function AchievementsHubComponent() {
     let total = 0;
     let unlocked = 0;
     const unlockedBadges = [];
+    const nextBadgeCandidates = [];
 
     gamesCatalog.forEach((game) => {
       const definition = resolvePlayableDefinition(game.id);
@@ -85,6 +116,19 @@ function AchievementsHubComponent() {
           });
         }
       });
+
+      const unlockedInGame = achievements.filter((item) => stored.includes(item.id)).length;
+      const nextLockedBadge = achievements.find((item) => !stored.includes(item.id));
+      if (nextLockedBadge) {
+        nextBadgeCandidates.push({
+          ...nextLockedBadge,
+          gameTitle: game.title,
+          gameId: game.id,
+          progress: unlockedInGame,
+          total: achievements.length,
+          progressRatio: unlockedInGame / achievements.length,
+        });
+      }
     });
 
     // Check for secret platform Konami code Easter Egg achievement
@@ -102,18 +146,21 @@ function AchievementsHubComponent() {
     }
 
     const percent = total > 0 ? Math.round((unlocked / total) * 100) : 0;
+    nextBadgeCandidates.sort((a, b) => b.progressRatio - a.progressRatio);
 
     return {
       total,
       unlocked,
       percent,
       unlockedBadges,
+      nextBadge: nextBadgeCandidates[0] ?? null,
     };
   }, [achievementsUpdateKey]);
 
   if (stats.unlocked === 0) {
     return (
-      <div className="rounded-2xl border border-border/80 bg-surface/40 p-6 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-[var(--shadow-soft)]">
+      <div className="rounded-2xl border border-border/80 bg-surface/40 p-6 backdrop-blur-xl flex flex-col gap-5 shadow-[var(--shadow-soft)]">
+        <div className="flex w-full flex-col items-center justify-between gap-6 md:flex-row">
         <div className="flex items-center gap-4 text-left">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/25 text-primary shadow-[var(--shadow-glow)]">
             <Trophy className="h-6 w-6" />
@@ -145,6 +192,8 @@ function AchievementsHubComponent() {
             0 / {stats.total} Badges
           </div>
         </div>
+        </div>
+        <NextBadgePrompt badge={stats.nextBadge} onPlay={openGame} />
       </div>
     );
   }
@@ -183,6 +232,10 @@ function AchievementsHubComponent() {
             <span className="text-xs font-mono font-bold">{stats.percent}%</span>
           </CircularProgress>
         </div>
+      </div>
+
+      <div className="md:col-span-12">
+        <NextBadgePrompt badge={stats.nextBadge} onPlay={openGame} />
       </div>
 
       {/* Unlocked Badges list */}
