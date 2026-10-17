@@ -18,4 +18,5 @@ export { BestScoreSpotlightSection } from './BestScoreSpotlightSection';
 export { LastWeekWinsSection } from './LastWeekWinsSection';
 export { PlayTimeSummarySection } from './PlayTimeSummarySection';
 export { LuckyPickSection } from './LuckyPickSection';
+export { ArcadePulseSection } from './ArcadePulseSection';
 export { ChallengeBurstSection } from './ChallengeBurstSection';

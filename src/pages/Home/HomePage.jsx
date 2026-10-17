@@ -21,6 +21,7 @@ import { LastWeekWinsSection } from './sections/LastWeekWinsSection';
 import { PlayTimeSummarySection } from './sections/PlayTimeSummarySection';
 import { LuckyPickSection } from './sections/LuckyPickSection';
 import { ChallengeBurstSection } from './sections/ChallengeBurstSection';
+import { ArcadePulseSection } from './sections/ArcadePulseSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -42,6 +43,7 @@ function HomePageComponent() {
         <LastWeekWinsSection />
         <LuckyPickSection />
         <ChallengeBurstSection />
+        <ArcadePulseSection />
         <PlayTimeSummarySection />
         <CatalogProgressSection />
         <SessionStreakSection />
