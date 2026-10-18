@@ -19,4 +19,5 @@ export { LastWeekWinsSection } from './LastWeekWinsSection';
 export { PlayTimeSummarySection } from './PlayTimeSummarySection';
 export { LuckyPickSection } from './LuckyPickSection';
 export { ArcadePulseSection } from './ArcadePulseSection';
+export { FreshStartSection } from './FreshStartSection';
 export { ChallengeBurstSection } from './ChallengeBurstSection';

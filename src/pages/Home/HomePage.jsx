@@ -22,6 +22,7 @@ import { PlayTimeSummarySection } from './sections/PlayTimeSummarySection';
 import { LuckyPickSection } from './sections/LuckyPickSection';
 import { ChallengeBurstSection } from './sections/ChallengeBurstSection';
 import { ArcadePulseSection } from './sections/ArcadePulseSection';
+import { FreshStartSection } from './sections/FreshStartSection';
 import { AchievementsHub, ProfileLevelCard } from '@components/game';
 
 function HomePageComponent() {
@@ -44,6 +45,7 @@ function HomePageComponent() {
         <LuckyPickSection />
         <ChallengeBurstSection />
         <ArcadePulseSection />
+        <FreshStartSection />
         <PlayTimeSummarySection />
         <CatalogProgressSection />
         <SessionStreakSection />
