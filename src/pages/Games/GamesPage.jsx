@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Container } from '@components/layout';
 import { pageFade } from '@utils/index';
 import { useGamesExplorer } from '@hooks/index';
-import { GamesHero, GamesFilters, GamesGrid } from './sections';
+import { GamesHero, GamesFilters, GamesGrid, DailyArcadePick } from './sections';
 
 function GamesPageComponent() {
   const {
@@ -42,6 +42,8 @@ function GamesPageComponent() {
           genre={filters.genre}
           onGenreChange={(val) => setFilter('genre', val)}
         />
+
+        <DailyArcadePick />
 
         {/* GamesGrid handles the simplified 12 classics grid */}
         <div className="pt-2 md:pt-4">
