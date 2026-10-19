@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Gamepad2 } from 'lucide-react';
 import { SearchInput } from '@ui';
@@ -10,6 +10,25 @@ export const GamesHero = memo(function GamesHero({
   matching,
   total,
 }) {
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      const target = event.target;
+      const isEditing = target instanceof HTMLElement && (
+        target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+      );
+
+      if (event.key === '/' && !event.altKey && !event.ctrlKey && !event.metaKey && !isEditing) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -28,6 +47,7 @@ export const GamesHero = memo(function GamesHero({
         className="space-y-3"
       >
         <SearchInput
+          ref={searchInputRef}
           size="lg"
           label="Search games"
           placeholder="Search by name or category…"
@@ -42,6 +62,9 @@ export const GamesHero = memo(function GamesHero({
           <span>
             Showing <strong className="text-text-secondary font-medium">{matching}</strong> of{' '}
             <strong className="text-text-secondary font-medium">{total}</strong> games
+          </span>
+          <span className="ml-auto hidden items-center gap-1.5 sm:inline-flex">
+            Press <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> to search
           </span>
         </p>
       </motion.div>
