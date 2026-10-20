@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { cn, playUiTick, playUiClick } from '@utils/index';
 import { useQuickPlay } from '@context/index';
 import { useFavorites } from '@hooks/index';
+import { CopyButton } from './CopyButton';
 
 function GameCardComponent({
   id,
@@ -161,15 +162,18 @@ function GameCardComponent({
             </p>
           </div>
 
-          <Link
-            to={`/play/${slug}`}
-            onClick={handlePlayClick}
-            onMouseEnter={playUiTick}
-            className="btn-primary mt-auto w-full justify-center text-body-sm py-2.5 shadow-[var(--shadow-soft)]"
-          >
-            <Play className="h-4 w-4 fill-current mr-1.5" />
-            <span>Play in Browser</span>
-          </Link>
+          <div className="flex gap-2 mt-auto w-full">
+            <Link
+              to={`/play/${slug}`}
+              onClick={handlePlayClick}
+              onMouseEnter={playUiTick}
+              className="btn-primary flex-1 justify-center text-body-sm py-2.5 shadow-[var(--shadow-soft)]"
+            >
+              <Play className="h-4 w-4 fill-current mr-1.5" />
+              <span>Play in Browser</span>
+            </Link>
+            <CopyButton url={window.location.origin + `/play/${slug}`} />
+          </div>
         </div>
       </motion.div>
     </div>
