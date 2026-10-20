@@ -1,7 +1,10 @@
 import { memo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Gamepad2 } from 'lucide-react';
+import { Gamepad2, Shuffle, Sparkles } from 'lucide-react';
 import { SearchInput } from '@ui';
+import { useQuickPlay } from '@context/index';
+import { useFavorites } from '@hooks/index';
+import { gamesCatalog } from '@data/games';
 
 export const GamesHero = memo(function GamesHero({
   query,
@@ -11,6 +14,8 @@ export const GamesHero = memo(function GamesHero({
   total,
 }) {
   const searchInputRef = useRef(null);
+  const { openGame } = useQuickPlay();
+  const { favorites } = useFavorites();
 
   useEffect(() => {
     const handleShortcut = (event) => {
@@ -29,6 +34,12 @@ export const GamesHero = memo(function GamesHero({
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
+  const handleRandomFavorite = () => {
+    const pool = favorites.length ? favorites : gamesCatalog.map((game) => game.id);
+    const id = pool[Math.floor(Math.random() * pool.length)];
+    if (id) openGame(id);
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -46,16 +57,31 @@ export const GamesHero = memo(function GamesHero({
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="space-y-3"
       >
-        <SearchInput
-          ref={searchInputRef}
-          size="lg"
-          label="Search games"
-          placeholder="Search by name or category…"
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          onClear={onClear}
-          inputClassName="bg-surface/80 border-border shadow-[var(--shadow-soft)] focus:border-primary"
-        />
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="flex-1">
+            <SearchInput
+              ref={searchInputRef}
+              size="lg"
+              label="Search games"
+              placeholder="Search by name or category…"
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              onClear={onClear}
+              inputClassName="bg-surface/80 border-border shadow-[var(--shadow-soft)] focus:border-primary"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleRandomFavorite}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm font-semibold text-primary transition hover:border-primary/40 hover:bg-primary/15"
+            title="Play a random favorite game"
+          >
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Random</span>
+            <Shuffle className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
 
         <p className="flex items-center gap-2 text-xs text-text-muted">
           <Gamepad2 className="h-3.5 w-3.5" aria-hidden="true" />
