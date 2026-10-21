@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
 import { Header } from '@components/layout/Header';
 import { BottomNav } from '@components/layout/BottomNav';
 import { NAV_ITEMS } from '@constants/navigation';
@@ -15,6 +16,7 @@ export function MainLayout() {
   const outlet = useOutlet();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [surpriseMeOpen, setSurpriseMeOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -24,6 +26,13 @@ export function MainLayout() {
     const handleOpenSurpriseMe = () => setSurpriseMeOpen(true);
     window.addEventListener('playverse_open_surprise_me', handleOpenSurpriseMe);
     return () => window.removeEventListener('playverse_open_surprise_me', handleOpenSurpriseMe);
+  }, []);
+
+  useEffect(() => {
+    const updateScrollTopVisibility = () => setShowScrollTop(window.scrollY > 400);
+    updateScrollTopVisibility();
+    window.addEventListener('scroll', updateScrollTopVisibility, { passive: true });
+    return () => window.removeEventListener('scroll', updateScrollTopVisibility);
   }, []);
 
   useKonamiCode(() => {
@@ -94,6 +103,19 @@ export function MainLayout() {
         <ArcadeScreensaver />
         <TrophyCelebrationModal />
         <QuickRollDock />
+        {showScrollTop && (
+          <motion.button
+            type="button"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-24 right-4 z-[250] flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-text shadow-lg transition hover:border-primary/40 hover:text-primary md:bottom-6"
+            aria-label="Back to top"
+            title="Back to top"
+          >
+            <ArrowUp className="h-5 w-5" aria-hidden="true" />
+          </motion.button>
+        )}
       </div>
     </QuickPlayProvider>
   );
