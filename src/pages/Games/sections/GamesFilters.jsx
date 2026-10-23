@@ -18,6 +18,11 @@ export const GamesFilters = memo(function GamesFilters({
       value: 'unplayed',
       count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) === 0).length,
     },
+    {
+      label: 'Played',
+      value: 'played',
+      count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) > 0).length,
+    },
     { label: 'Favorites', value: 'favorites', count: favorites.length, isFav: true },
     ...GAME_GENRES.filter((g) => g.toLowerCase() !== 'all').map((g) => {
       const val = g.toLowerCase();
