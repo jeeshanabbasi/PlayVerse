@@ -115,6 +115,8 @@ export function useGamesExplorer(source = gamesCatalog) {
         if (Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) > 0) return false;
       } else if (filters.genre === 'played') {
         if (Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) === 0) return false;
+      } else if (filters.genre === 'recorded') {
+        if (Number(localStorage.getItem(`playverse.game.${game.id}.highScore`) || 0) <= 0) return false;
       } else if (filters.genre === 'favorites') {
         try {
           const raw = localStorage.getItem('playverse_favorites');
