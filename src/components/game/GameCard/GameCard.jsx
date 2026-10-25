@@ -1,11 +1,20 @@
-import { memo, useState, useRef } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Info, Heart } from 'lucide-react';
+import { Play, Info, Heart, Trophy } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn, playUiTick, playUiClick } from '@utils/index';
 import { useQuickPlay } from '@context/index';
 import { useFavorites } from '@hooks/index';
 import { CopyButton } from './CopyButton';
+
+function getPersonalBest(gameId) {
+  try {
+    const score = Number(localStorage.getItem(`playverse.game.${gameId}.highScore`) || 0);
+    return Number.isFinite(score) ? score : 0;
+  } catch {
+    return 0;
+  }
+}
 
 function GameCardComponent({
   id,
@@ -18,9 +27,16 @@ function GameCardComponent({
   const slug = id;
   const cardRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [personalBest, setPersonalBest] = useState(() => getPersonalBest(id));
   const [tilt, setTilt] = useState({ rx: 0, ry: 0, shineX: 50, shineY: 50, active: false });
   const { openGame } = useQuickPlay();
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  useEffect(() => {
+    const refreshPersonalBest = () => setPersonalBest(getPersonalBest(slug));
+    window.addEventListener('playverse_stats_updated', refreshPersonalBest);
+    return () => window.removeEventListener('playverse_stats_updated', refreshPersonalBest);
+  }, [slug]);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -160,6 +176,12 @@ function GameCardComponent({
             <p className="text-body-sm text-text-muted mt-1">
               {genres.join(' · ')}
             </p>
+            {personalBest > 0 && (
+              <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-warning">
+                <Trophy className="h-3.5 w-3.5" aria-hidden="true" />
+                Personal best: {personalBest.toLocaleString()}
+              </p>
+            )}
           </div>
 
           <div className="flex gap-2 mt-auto w-full">
