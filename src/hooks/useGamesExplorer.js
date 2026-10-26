@@ -56,6 +56,12 @@ function sortGames(list, sort) {
       return next.sort((a, b) => b.releasedAt - a.releasedAt);
     case 'most-played':
       return next.sort((a, b) => b.plays - a.plays);
+    case 'personal-best':
+      return next.sort((a, b) => {
+        const scoreA = Number(localStorage.getItem(`playverse.game.${a.id}.highScore`) || 0);
+        const scoreB = Number(localStorage.getItem(`playverse.game.${b.id}.highScore`) || 0);
+        return scoreB - scoreA || a.title.localeCompare(b.title);
+      });
     case 'highest-rated':
       return next.sort((a, b) => b.rating - a.rating || b.plays - a.plays);
     case 'alphabetical':

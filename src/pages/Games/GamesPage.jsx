@@ -37,11 +37,28 @@ function GamesPageComponent() {
           total={total}
         />
 
-        {/* GamesFilters handles only genre chips */}
-        <GamesFilters
-          genre={filters.genre}
-          onGenreChange={(val) => setFilter('genre', val)}
-        />
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0 flex-1">
+            <GamesFilters
+              genre={filters.genre}
+              onGenreChange={(val) => setFilter('genre', val)}
+            />
+          </div>
+          <label className="flex shrink-0 items-center gap-2 text-sm text-text-secondary">
+            Sort
+            <select
+              value={filters.sort}
+              onChange={(event) => setFilter('sort', event.target.value)}
+              className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
+            >
+              <option value="trending">Trending</option>
+              <option value="personal-best">Personal Best</option>
+              <option value="most-played">Most played</option>
+              <option value="highest-rated">Highest rated</option>
+              <option value="alphabetical">A-Z</option>
+            </select>
+          </label>
+        </div>
 
         <DailyArcadePick />
 
