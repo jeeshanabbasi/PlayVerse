@@ -16,6 +16,8 @@ import { RecommendedSection } from './sections/RecommendedSection';
 import { CatalogProgressSection } from './sections/CatalogProgressSection';
 import { SessionStreakSection } from './sections/SessionStreakSection';
 import { QuickResumeSection } from './sections/QuickResumeSection';
+import { FavoriteGenreSpotlightSection } from './sections/FavoriteGenreSpotlightSection';
+import { WeeklyMomentumSection } from './sections/WeeklyMomentumSection';
 import { BestScoreSpotlightSection } from './sections/BestScoreSpotlightSection';
 import { LastWeekWinsSection } from './sections/LastWeekWinsSection';
 import { PlayTimeSummarySection } from './sections/PlayTimeSummarySection';
@@ -40,6 +42,8 @@ function HomePageComponent() {
         <AchievementsHub />
         <ProfileLevelCard />
         <QuickResumeSection />
+        <FavoriteGenreSpotlightSection />
+        <WeeklyMomentumSection />
         <BestScoreSpotlightSection />
         <LastWeekWinsSection />
         <LuckyPickSection />
