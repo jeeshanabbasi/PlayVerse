@@ -49,9 +49,26 @@ function matchesQuick(game, quick) {
   return true;
 }
 
+function getRecentGameOrder() {
+  try {
+    const history = JSON.parse(localStorage.getItem('playverse_history') || '[]');
+    return new Map(Array.isArray(history) ? history.map((gameId, index) => [gameId, index]) : []);
+  } catch {
+    return new Map();
+  }
+}
+
 function sortGames(list, sort) {
   const next = [...list];
   switch (sort) {
+    case 'recently-played': {
+      const recentOrder = getRecentGameOrder();
+      return next.sort((a, b) => {
+        const orderA = recentOrder.get(a.id) ?? Infinity;
+        const orderB = recentOrder.get(b.id) ?? Infinity;
+        return orderA - orderB || a.title.localeCompare(b.title);
+      });
+    }
     case 'newest':
       return next.sort((a, b) => b.releasedAt - a.releasedAt);
     case 'most-played':

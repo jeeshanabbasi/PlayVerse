@@ -52,6 +52,7 @@ function GamesPageComponent() {
               className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
             >
               <option value="trending">Trending</option>
+              <option value="recently-played">Recently played</option>
               <option value="personal-best">Personal Best</option>
               <option value="most-played">Most played</option>
               <option value="highest-rated">Highest rated</option>
