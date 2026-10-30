@@ -69,6 +69,15 @@ function sortGames(list, sort) {
         return orderA - orderB || a.title.localeCompare(b.title);
       });
     }
+    case 'difficulty': {
+      const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2 };
+      return next.sort(
+        (a, b) =>
+          (difficultyOrder[a.difficulty] ?? Infinity) -
+            (difficultyOrder[b.difficulty] ?? Infinity) ||
+          a.title.localeCompare(b.title),
+      );
+    }
     case 'newest':
       return next.sort((a, b) => b.releasedAt - a.releasedAt);
     case 'most-played':

@@ -53,6 +53,7 @@ function GamesPageComponent() {
             >
               <option value="trending">Trending</option>
               <option value="recently-played">Recently played</option>
+              <option value="difficulty">Difficulty: Easy to Hard</option>
               <option value="personal-best">Personal Best</option>
               <option value="most-played">Most played</option>
               <option value="highest-rated">Highest rated</option>
