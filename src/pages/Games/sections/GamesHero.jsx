@@ -24,6 +24,12 @@ export const GamesHero = memo(function GamesHero({
         target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
       );
 
+      if (event.key === 'Escape' && target === searchInputRef.current && query) {
+        event.preventDefault();
+        onClear();
+        return;
+      }
+
       if (event.key === '/' && !event.altKey && !event.ctrlKey && !event.metaKey && !isEditing) {
         event.preventDefault();
         searchInputRef.current?.focus();
@@ -32,7 +38,7 @@ export const GamesHero = memo(function GamesHero({
 
     window.addEventListener('keydown', handleShortcut);
     return () => window.removeEventListener('keydown', handleShortcut);
-  }, []);
+  }, [onClear, query]);
 
   const handleRandomFavorite = () => {
     const pool = favorites.length ? favorites : gamesCatalog.map((game) => game.id);
@@ -90,7 +96,9 @@ export const GamesHero = memo(function GamesHero({
             <strong className="text-text-secondary font-medium">{total}</strong> games
           </span>
           <span className="ml-auto hidden items-center gap-1.5 sm:inline-flex">
-            Press <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> to search
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> search
+            <span aria-hidden="true">·</span>
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">Esc</kbd> clear
           </span>
         </p>
       </motion.div>
