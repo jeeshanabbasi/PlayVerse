@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Container } from '@components/layout';
 import { pageFade } from '@utils/index';
 import { useGamesExplorer } from '@hooks/index';
+import { GAME_DIFFICULTIES } from '@data/games';
 import { GamesHero, GamesFilters, GamesGrid, DailyArcadePick, RecentlyPlayedRow } from './sections';
 
 function GamesPageComponent() {
@@ -44,22 +45,37 @@ function GamesPageComponent() {
               onGenreChange={(val) => setFilter('genre', val)}
             />
           </div>
-          <label className="flex shrink-0 items-center gap-2 text-sm text-text-secondary">
-            Sort
-            <select
-              value={filters.sort}
-              onChange={(event) => setFilter('sort', event.target.value)}
-              className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
-            >
-              <option value="trending">Trending</option>
-              <option value="recently-played">Recently played</option>
-              <option value="difficulty">Difficulty: Easy to Hard</option>
-              <option value="personal-best">Personal Best</option>
-              <option value="most-played">Most played</option>
-              <option value="highest-rated">Highest rated</option>
-              <option value="alphabetical">A-Z</option>
-            </select>
-          </label>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <label className="flex items-center gap-2 text-sm text-text-secondary">
+              Difficulty
+              <select
+                value={filters.difficulty}
+                onChange={(event) => setFilter('difficulty', event.target.value)}
+                className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
+              >
+                <option value="all">All</option>
+                {GAME_DIFFICULTIES.map((difficulty) => (
+                  <option key={difficulty} value={difficulty}>{difficulty}</option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-text-secondary">
+              Sort
+              <select
+                value={filters.sort}
+                onChange={(event) => setFilter('sort', event.target.value)}
+                className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
+              >
+                <option value="trending">Trending</option>
+                <option value="recently-played">Recently played</option>
+                <option value="difficulty">Difficulty: Easy to Hard</option>
+                <option value="personal-best">Personal Best</option>
+                <option value="most-played">Most played</option>
+                <option value="highest-rated">Highest rated</option>
+                <option value="alphabetical">A-Z</option>
+              </select>
+            </label>
+          </div>
         </div>
 
         <RecentlyPlayedRow />
