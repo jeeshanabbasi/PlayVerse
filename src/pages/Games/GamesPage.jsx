@@ -34,6 +34,7 @@ function GamesPageComponent() {
           query={query}
           onQueryChange={setQuery}
           onClear={() => setQuery('')}
+          games={results}
           matching={matching}
           total={total}
         />
