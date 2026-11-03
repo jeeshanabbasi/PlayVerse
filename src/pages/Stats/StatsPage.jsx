@@ -1,8 +1,9 @@
 import { memo, useEffect, useState } from 'react';
-import { BarChart3, Clock3, Gamepad2, Trophy } from 'lucide-react';
+import { BarChart3, Clock3, Copy, Gamepad2, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Container } from '@components/layout';
 import { gamesCatalog } from '@data/games';
+import { useToast } from '@hooks/index';
 import { pageFade, cn } from '@utils/index';
 
 const STORAGE_PREFIX = 'playverse.game';
@@ -76,6 +77,7 @@ function StatCard({ icon: Icon, label, value, detail }) {
 
 function StatsPageComponent() {
   const [stats, setStats] = useState(getStats);
+  const { success, error } = useToast();
 
   useEffect(() => {
     const refresh = () => setStats(getStats());
@@ -91,6 +93,25 @@ function StatsPageComponent() {
     .filter((game) => game.playCount > 0 || game.bestScore > 0)
     .sort((a, b) => b.playCount - a.playCount || b.bestScore - a.bestScore);
 
+  const copySummary = async () => {
+    const summary = [
+      'PlayVerse Player Summary',
+      `Level ${stats.level} · ${stats.xp.toLocaleString('en-US')} XP`,
+      `Games played: ${stats.playedGames.length}/${stats.games.length}`,
+      `Total sessions: ${stats.totalSessions}`,
+      `Favorite genre: ${stats.favoriteGenre}`,
+      `Most played: ${stats.mostPlayed}`,
+      `Best score: ${stats.bestScore.toLocaleString('en-US')}`,
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(summary);
+      success('Summary copied', 'Your player stats are ready to share.');
+    } catch {
+      error('Copy unavailable', 'Clipboard access is not available in this browser.');
+    }
+  };
+
   return (
     <motion.div
       initial={pageFade.initial}
@@ -100,12 +121,22 @@ function StatsPageComponent() {
       className="pb-16 pt-8 md:pt-12"
     >
       <Container className="space-y-10 md:space-y-12">
-        <header className="max-w-2xl space-y-3">
-          <p className="text-label text-primary">Your Play Profile</p>
-          <h1 className="text-display-lg font-bold tracking-tight text-text">Game Statistics</h1>
-          <p className="text-body-lg text-text-secondary">
-            Level {stats.level} profile · {stats.xp.toLocaleString('en-US')} XP earned from your runs.
-          </p>
+        <header className="flex max-w-3xl flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-3">
+            <p className="text-label text-primary">Your Play Profile</p>
+            <h1 className="text-display-lg font-bold tracking-tight text-text">Game Statistics</h1>
+            <p className="text-body-lg text-text-secondary">
+              Level {stats.level} profile · {stats.xp.toLocaleString('en-US')} XP earned from your runs.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={copySummary}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 text-sm font-semibold text-text transition hover:border-border-hover hover:bg-surface-hover"
+          >
+            <Copy className="h-4 w-4" aria-hidden="true" />
+            Copy summary
+          </button>
         </header>
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Game statistics summary">
