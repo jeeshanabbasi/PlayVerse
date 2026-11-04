@@ -77,6 +77,7 @@ function StatCard({ icon: Icon, label, value, detail }) {
 
 function StatsPageComponent() {
   const [stats, setStats] = useState(getStats);
+  const [activitySort, setActivitySort] = useState('sessions');
   const { success, error } = useToast();
 
   useEffect(() => {
@@ -91,7 +92,15 @@ function StatsPageComponent() {
 
   const rankedGames = [...stats.games]
     .filter((game) => game.playCount > 0 || game.bestScore > 0)
-    .sort((a, b) => b.playCount - a.playCount || b.bestScore - a.bestScore);
+    .sort((a, b) => {
+      if (activitySort === 'score') {
+        return b.bestScore - a.bestScore || b.playCount - a.playCount || a.title.localeCompare(b.title);
+      }
+      if (activitySort === 'recent') {
+        return b.lastPlayed - a.lastPlayed || b.playCount - a.playCount || a.title.localeCompare(b.title);
+      }
+      return b.playCount - a.playCount || b.bestScore - a.bestScore || a.title.localeCompare(b.title);
+    });
 
   const copySummary = async () => {
     const summary = [
@@ -149,9 +158,23 @@ function StatsPageComponent() {
         </section>
 
         <section className="space-y-5">
-          <div>
-            <h2 className="text-heading-lg font-bold text-text">Your Activity</h2>
-            <p className="mt-1 text-body-md text-text-secondary">Games ranked by your activity.</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-heading-lg font-bold text-text">Your Activity</h2>
+              <p className="mt-1 text-body-md text-text-secondary">Games ranked by your activity.</p>
+            </div>
+            <label className="flex items-center gap-2 text-sm text-text-secondary">
+              Rank by
+              <select
+                value={activitySort}
+                onChange={(event) => setActivitySort(event.target.value)}
+                className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus:border-primary/50"
+              >
+                <option value="sessions">Most sessions</option>
+                <option value="score">Best score</option>
+                <option value="recent">Recently played</option>
+              </select>
+            </label>
           </div>
 
           {rankedGames.length > 0 ? (
