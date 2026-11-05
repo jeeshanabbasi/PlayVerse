@@ -1,8 +1,39 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Gamepad2, Shuffle, Sparkles } from 'lucide-react';
+import { Gamepad2, Shuffle, Sparkles, Clock3 } from 'lucide-react';
 import { SearchInput } from '@ui';
 import { useQuickPlay } from '@context/index';
+
+function getLatestSession() {
+  try {
+    const history = JSON.parse(localStorage.getItem('playverse_history') || '[]');
+    const latestId = Array.isArray(history) ? history[0] : null;
+    if (!latestId) return null;
+
+    const game = JSON.parse(localStorage.getItem('playverse_last_opened_game') || 'null');
+    const lastPlayed = Number(localStorage.getItem(`playverse.game.${latestId}.lastPlayed`) || 0);
+
+    if (!game && !lastPlayed) return null;
+
+    const gameTitle = game?.title || latestId;
+    const lastDate = lastPlayed ? new Date(lastPlayed) : new Date();
+    const diffMinutes = Math.max(1, Math.round((Date.now() - lastDate.getTime()) / 60000));
+
+    if (diffMinutes < 60) {
+      return `${gameTitle} • ${diffMinutes}m ago`;
+    }
+
+    const diffHours = Math.round(diffMinutes / 60);
+    if (diffHours < 24) {
+      return `${gameTitle} • ${diffHours}h ago`;
+    }
+
+    const diffDays = Math.round(diffHours / 24);
+    return `${gameTitle} • ${diffDays}d ago`;
+  } catch {
+    return null;
+  }
+}
 
 export const GamesHero = memo(function GamesHero({
   query,
@@ -14,6 +45,7 @@ export const GamesHero = memo(function GamesHero({
 }) {
   const searchInputRef = useRef(null);
   const { openGame } = useQuickPlay();
+  const latestSession = useMemo(() => getLatestSession(), [query, matching, total]);
 
   useEffect(() => {
     const handleShortcut = (event) => {
@@ -87,17 +119,27 @@ export const GamesHero = memo(function GamesHero({
           </button>
         </div>
 
-        <p className="flex items-center gap-2 text-xs text-text-muted">
-          <Gamepad2 className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>
-            Showing <strong className="text-text-secondary font-medium">{matching}</strong> of{' '}
-            <strong className="text-text-secondary font-medium">{total}</strong> games
-          </span>
-          <span className="ml-auto hidden items-center gap-1.5 sm:inline-flex">
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> search
-            <span aria-hidden="true">·</span>
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">Esc</kbd> clear
-          </span>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex items-center gap-2 text-xs text-text-muted">
+            <Gamepad2 className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>
+              Showing <strong className="text-text-secondary font-medium">{matching}</strong> of{' '}
+              <strong className="text-text-secondary font-medium">{total}</strong> games
+            </span>
+          </p>
+
+          {latestSession && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-[10px] font-medium text-text-secondary">
+              <Clock3 className="h-3 w-3 text-accent" aria-hidden="true" />
+              {latestSession}
+            </span>
+          )}
+        </div>
+
+        <p className="flex items-center justify-end gap-1.5 text-xs text-text-muted">
+          <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> search
+          <span aria-hidden="true">·</span>
+          <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">Esc</kbd> clear
         </p>
       </motion.div>
     </div>
