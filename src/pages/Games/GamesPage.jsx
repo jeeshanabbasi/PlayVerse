@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
+import { RotateCcw } from 'lucide-react';
 import { Container } from '@components/layout';
 import { pageFade } from '@utils/index';
 import { useGamesExplorer } from '@hooks/index';
@@ -76,6 +77,17 @@ function GamesPageComponent() {
                 <option value="alphabetical">A-Z</option>
               </select>
             </label>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-text-muted transition hover:bg-surface-hover hover:text-text"
+                title="Clear search, filters, and sorting"
+              >
+                <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                Clear
+              </button>
+            )}
           </div>
         </div>
 
