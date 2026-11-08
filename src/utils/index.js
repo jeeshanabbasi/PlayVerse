@@ -12,3 +12,4 @@ export function delay(ms) {
 
 export * from './motion';
 export * from './audio';
+export * from './storage';

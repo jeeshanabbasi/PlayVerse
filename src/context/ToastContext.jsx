@@ -45,9 +45,21 @@ export function ToastProvider({ children }) {
     [toast],
   );
 
+  const addToast = useCallback(
+    ({ title, description, message, variant, duration } = {}) => {
+      const type = variant === 'danger'
+        ? TOAST_TYPES.ERROR
+        : Object.values(TOAST_TYPES).includes(variant)
+          ? variant
+          : TOAST_TYPES.INFO;
+      return toast({ title, message: message ?? description, type, duration });
+    },
+    [toast],
+  );
+
   const value = useMemo(
-    () => ({ toasts, toast, dismiss, success, error, warning, info }),
-    [toasts, toast, dismiss, success, error, warning, info],
+    () => ({ toasts, toast, dismiss, success, error, warning, info, addToast }),
+    [toasts, toast, dismiss, success, error, warning, info, addToast],
   );
 
   return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;

@@ -1,26 +1,23 @@
 import { STORAGE_PREFIX } from '../config/defaults';
+import { getStoredJson, removeStoredItem, setStoredItem } from '@utils/storage';
 
 function key(slug, suffix) {
   return `${STORAGE_PREFIX}.${slug}.${suffix}`;
 }
 
 function readJson(storageKey, fallback) {
-  try {
-    const raw = localStorage.getItem(storageKey);
-    if (raw == null) return fallback;
-    return JSON.parse(raw);
-  } catch {
-    return fallback;
-  }
+  return getStoredJson(storageKey, fallback);
 }
 
 function writeJson(storageKey, value) {
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(value));
+  if (setStoredItem(storageKey, JSON.stringify(value))) {
     window.dispatchEvent(new Event('playverse_stats_updated'));
-  } catch {
-    // Storage quota / private mode — fail silently
   }
+}
+
+function finiteNonNegative(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.max(0, number) : 0;
 }
 
 export function createGameStorage(slug) {
@@ -30,7 +27,7 @@ export function createGameStorage(slug) {
 
   return {
     getHighScore() {
-      return Number(readJson(key(slug, 'highScore'), 0)) || 0;
+      return finiteNonNegative(readJson(key(slug, 'highScore'), 0));
     },
 
     setHighScore(score) {
@@ -48,7 +45,7 @@ export function createGameStorage(slug) {
     },
 
     getPlayCount() {
-      return Number(readJson(key(slug, 'playCount'), 0)) || 0;
+      return finiteNonNegative(readJson(key(slug, 'playCount'), 0));
     },
 
     incrementPlayCount() {
@@ -60,11 +57,14 @@ export function createGameStorage(slug) {
 
     getLastPlayed() {
       const value = readJson(key(slug, 'lastPlayed'), null);
-      return value == null ? null : Number(value);
+      return value == null ? null : finiteNonNegative(value);
     },
 
     getAchievements() {
-      return readJson(key(slug, 'achievements'), []);
+      const achievements = readJson(key(slug, 'achievements'), []);
+      return Array.isArray(achievements)
+        ? achievements.filter((achievementId) => typeof achievementId === 'string')
+        : [];
     },
 
     unlockAchievement(achievementId) {
@@ -102,7 +102,7 @@ export function createGameStorage(slug) {
         'achievements',
         'progress',
         'settings',
-      ].forEach((suffix) => localStorage.removeItem(key(slug, suffix)));
+      ].forEach((suffix) => removeStoredItem(key(slug, suffix)));
     },
   };
 }

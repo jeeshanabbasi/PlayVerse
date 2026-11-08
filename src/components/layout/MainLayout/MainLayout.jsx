@@ -10,6 +10,7 @@ import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
 import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal, QuickRollDock } from '@components/common';
 import { useKonamiCode } from '@hooks/index';
+import { getStoredItem, setStoredItem } from '@utils/index';
 
 export function MainLayout() {
   const location = useLocation();
@@ -20,7 +21,7 @@ export function MainLayout() {
   const { addToast } = useToast();
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('playverse_accent_theme') || 'purple';
+    const storedTheme = getStoredItem('playverse_accent_theme') || 'purple';
     document.documentElement.setAttribute('data-accent-theme', storedTheme);
 
     const handleOpenSurpriseMe = () => setSurpriseMeOpen(true);
@@ -36,9 +37,9 @@ export function MainLayout() {
   }, []);
 
   useKonamiCode(() => {
-    const isUnlocked = localStorage.getItem('playverse_konami_unlocked') === 'true';
+    const isUnlocked = getStoredItem('playverse_konami_unlocked') === 'true';
     if (!isUnlocked) {
-      localStorage.setItem('playverse_konami_unlocked', 'true');
+      setStoredItem('playverse_konami_unlocked', 'true');
       window.dispatchEvent(new Event('playverse_achievements_updated'));
       window.dispatchEvent(
         new CustomEvent('playverse_achievement_celebration', {

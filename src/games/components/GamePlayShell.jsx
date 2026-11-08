@@ -8,7 +8,7 @@ import { GameCanvas } from './GameCanvas';
 import { GameSidebar } from './GameSidebar';
 import { VirtualController } from './VirtualController';
 import { RelatedGamesBar } from './RelatedGamesBar';
-import { cn } from '@utils/index';
+import { cn, getStoredItem, getStoredJson, setStoredItem } from '@utils/index';
 
 export const GamePlayShell = memo(function GamePlayShell({
   slug,
@@ -22,13 +22,13 @@ export const GamePlayShell = memo(function GamePlayShell({
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(shellRef);
 
   const [showVirtualController, setShowVirtualController] = useState(() => {
-    const raw = localStorage.getItem('playverse_mobile_controls');
+    const raw = getStoredItem('playverse_mobile_controls');
     return raw ? raw === 'true' : true;
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const raw = localStorage.getItem('playverse_mobile_controls');
+      const raw = getStoredItem('playverse_mobile_controls');
       setShowVirtualController(raw ? raw === 'true' : true);
     };
     window.addEventListener('playverse_mobile_controls_updated', handleUpdate);
@@ -38,12 +38,11 @@ export const GamePlayShell = memo(function GamePlayShell({
   useEffect(() => {
     if (slug) {
       try {
-        const raw = localStorage.getItem('playverse_history');
-        let history = raw ? JSON.parse(raw) : [];
+        let history = getStoredJson('playverse_history', []);
         if (!Array.isArray(history)) history = [];
         history = history.filter((item) => item !== slug);
         history.unshift(slug);
-        localStorage.setItem('playverse_history', JSON.stringify(history.slice(0, 4)));
+        setStoredItem('playverse_history', JSON.stringify(history.slice(0, 4)));
       } catch {
         // fail silently
       }

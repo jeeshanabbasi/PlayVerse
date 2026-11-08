@@ -1,3 +1,5 @@
+import { getStoredItem, setStoredItem } from './storage';
+
 let audioCtx = null;
 let ambientOsc = null;
 let ambientGain = null;
@@ -15,14 +17,14 @@ export function getAudioContext() {
 }
 
 export function setMuteState(muted) {
-  localStorage.setItem('playverse_ui_muted', muted ? 'true' : 'false');
+  setStoredItem('playverse_ui_muted', muted ? 'true' : 'false');
   if (muted) {
     stopAmbientSoundscape();
   }
 }
 
 export function getMuteState() {
-  const saved = localStorage.getItem('playverse_ui_muted');
+  const saved = getStoredItem('playverse_ui_muted');
   return saved === 'true';
 }
 

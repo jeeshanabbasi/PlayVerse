@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Gamepad2 } from 'lucide-react';
+import { getStoredItem } from '@utils/storage';
 
 const COLORS = [
   '#7c3aed', // Purple
@@ -24,7 +25,7 @@ function ArcadeScreensaverComponent() {
       setActive(false);
       clearTimeout(idleTimeoutRef.current);
       
-      const enabled = localStorage.getItem('playverse_screensaver_enabled') !== 'false';
+      const enabled = getStoredItem('playverse_screensaver_enabled') !== 'false';
       if (enabled) {
         idleTimeoutRef.current = setTimeout(() => {
           setActive(true);

@@ -1,32 +1,37 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad, Sparkles, Download, HeartOff } from 'lucide-react';
-import { cn, playUiTick, playUiClick, setMuteState, getMuteState } from '@utils/index';
+import {
+  cn,
+  getStoredItem,
+  getStoredJson,
+  getStoredKeys,
+  removeStoredItem,
+  setStoredItem,
+  playUiTick,
+  playUiClick,
+  setMuteState,
+  getMuteState,
+} from '@utils/index';
 import { useToast } from '@context/index';
 
 const AVATARS = ['👾', '🚀', '🐱', '🦖', '👑', '⚡', '👽', '🦊', '🤖'];
 
 function SettingsDrawerComponent({ isOpen, onClose }) {
   const { addToast } = useToast();
-  
+
   const [nickname, setNickname] = useState(() => {
-    try {
-      const stored = localStorage.getItem('playverse_profile');
-      if (stored) return JSON.parse(stored).nickname || 'Jeeshan Abbasi';
-    } catch {}
-    return 'Jeeshan Abbasi';
+    const profile = getStoredJson('playverse_profile', {});
+    return typeof profile?.nickname === 'string' ? profile.nickname : 'Jeeshan Abbasi';
   });
 
   const [selectedAvatar, setSelectedAvatar] = useState(() => {
-    try {
-      const stored = localStorage.getItem('playverse_profile');
-      if (stored) return JSON.parse(stored).avatar || '👾';
-    } catch {}
-    return '👾';
+    const profile = getStoredJson('playverse_profile', {});
+    return AVATARS.includes(profile?.avatar) ? profile.avatar : '👾';
   });
 
   const [crtEnabled, setCrtEnabled] = useState(() => {
-    return localStorage.getItem('playverse_global_crt') === 'true';
+    return getStoredItem('playverse_global_crt') === 'true';
   });
 
   const [soundMuted, setSoundMuted] = useState(() => {
@@ -34,16 +39,16 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
   });
 
   const [accentTheme, setAccentTheme] = useState(() => {
-    return localStorage.getItem('playverse_accent_theme') || 'purple';
+    return getStoredItem('playverse_accent_theme') || 'purple';
   });
 
   const [mobileControls, setMobileControls] = useState(() => {
-    const raw = localStorage.getItem('playverse_mobile_controls');
+    const raw = getStoredItem('playverse_mobile_controls');
     return raw ? raw === 'true' : true;
   });
 
   const [screensaverEnabled, setScreensaverEnabled] = useState(() => {
-    return localStorage.getItem('playverse_screensaver_enabled') !== 'false';
+    return getStoredItem('playverse_screensaver_enabled') !== 'false';
   });
 
   useEffect(() => {
@@ -53,14 +58,14 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
   const handleThemeChange = (theme) => {
     playUiClick();
     setAccentTheme(theme);
-    localStorage.setItem('playverse_accent_theme', theme);
+    setStoredItem('playverse_accent_theme', theme);
   };
 
   const handleToggleMobileControls = () => {
     playUiClick();
     const next = !mobileControls;
     setMobileControls(next);
-    localStorage.setItem('playverse_mobile_controls', next ? 'true' : 'false');
+    setStoredItem('playverse_mobile_controls', next ? 'true' : 'false');
     window.dispatchEvent(new Event('playverse_mobile_controls_updated'));
   };
 
@@ -68,7 +73,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     playUiClick();
     const next = !screensaverEnabled;
     setScreensaverEnabled(next);
-    localStorage.setItem('playverse_screensaver_enabled', next ? 'true' : 'false');
+    setStoredItem('playverse_screensaver_enabled', next ? 'true' : 'false');
   };
 
   // Save profile edits in local storage and dispatch update event
@@ -98,7 +103,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     playUiClick();
     const next = !crtEnabled;
     setCrtEnabled(next);
-    localStorage.setItem('playverse_global_crt', next ? 'true' : 'false');
+    setStoredItem('playverse_global_crt', next ? 'true' : 'false');
     addToast({
       title: next ? 'CRT Filter Enabled Globally' : 'CRT Filter Disabled Globally',
       description: 'Restart any active game session to apply changes.',
@@ -119,14 +124,7 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     playUiClick();
     if (window.confirm('Are you sure you want to reset all game high scores, history, and achievements? This action is permanent.')) {
       try {
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && (key.startsWith('playverse.') || key.startsWith('playverse_'))) {
-            keysToRemove.push(key);
-          }
-        }
-        keysToRemove.forEach((key) => localStorage.removeItem(key));
+        getStoredKeys('playverse').forEach(removeStoredItem);
         addToast({
           title: 'Profile Reset Successfully',
           description: 'All high scores, badges, and history have been cleared.',
@@ -145,18 +143,16 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
 
   const handleClearFavorites = () => {
     playUiClick();
-    localStorage.removeItem('playverse_favorites');
+    removeStoredItem('playverse_favorites');
     window.dispatchEvent(new Event('playverse_favorites_updated'));
     addToast({ title: 'Favorites cleared', description: 'Your game shelf is empty now.', variant: 'success' });
   };
 
   const handleExportData = () => {
     playUiClick();
-    const data = {};
-    for (let i = 0; i < localStorage.length; i += 1) {
-      const key = localStorage.key(i);
-      if (key?.startsWith('playverse')) data[key] = localStorage.getItem(key);
-    }
+    const data = Object.fromEntries(
+      getStoredKeys('playverse').map((key) => [key, getStoredItem(key)]),
+    );
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

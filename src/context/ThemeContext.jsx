@@ -1,13 +1,17 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { getStoredItem, setStoredItem } from '@utils/storage';
 
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem('playverse_theme') || 'dark');
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = getStoredItem('playverse_theme');
+    return savedTheme === 'light' ? 'light' : 'dark';
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('playverse_theme', theme);
+    setStoredItem('playverse_theme', theme);
   }, [theme]);
 
   const toggleTheme = useCallback(() => {

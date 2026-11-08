@@ -19,8 +19,6 @@ export function useGameEngine({
   const engineRef = useRef(null);
   const settingsRef = useRef(settings);
   const audioRef = useRef(audio);
-  const { addToast } = useToast();
-
   settingsRef.current = settings;
   audioRef.current = audio;
 

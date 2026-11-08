@@ -1,3 +1,5 @@
+import { getStoredItem } from '@utils/storage';
+
 export const ENGINE_EVENTS = Object.freeze({
   READY: 'engine:ready',
   DESTROYED: 'engine:destroyed',
@@ -27,5 +29,5 @@ export const DEFAULT_SETTINGS = Object.freeze({
   showFps: false,
   debug: false,
   touchControls: true,
-  crt: typeof window !== 'undefined' ? localStorage.getItem('playverse_global_crt') === 'true' : false,
+  crt: getStoredItem('playverse_global_crt') === 'true',
 });
