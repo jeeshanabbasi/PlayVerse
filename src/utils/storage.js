@@ -6,6 +6,89 @@ function getStorage() {
   }
 }
 
+export function createSafeStorage(storage = getStorage()) {
+  const source = storage ?? {
+    getItem: () => null,
+    setItem: () => undefined,
+    removeItem: () => undefined,
+    clear: () => undefined,
+    key: () => null,
+    get length() {
+      return 0;
+    },
+  };
+
+  return {
+    getItem(key) {
+      try {
+        return source.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+    setItem(key, value) {
+      try {
+        source.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    removeItem(key) {
+      try {
+        source.removeItem(key);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    clear() {
+      try {
+        source.clear();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    key(index) {
+      try {
+        return source.key(index);
+      } catch {
+        return null;
+      }
+    },
+    get length() {
+      try {
+        return source.length ?? 0;
+      } catch {
+        return 0;
+      }
+    },
+  };
+}
+
+export function installSafeStorage() {
+  const safeStorage = createSafeStorage();
+
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+    const canOverride = !descriptor || descriptor.configurable !== false;
+
+    if (canOverride) {
+      Object.defineProperty(globalThis, 'localStorage', {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: safeStorage,
+      });
+    }
+  } catch {
+    // Ignore browser security restrictions; the safe getter above still keeps reads non-crashing.
+  }
+
+  return globalThis.localStorage ?? safeStorage;
+}
+
 export function getStoredItem(key, fallback = null) {
   try {
     return getStorage()?.getItem(key) ?? fallback;
