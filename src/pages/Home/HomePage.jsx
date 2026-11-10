@@ -16,6 +16,7 @@ import { RecommendedSection } from './sections/RecommendedSection';
 import { CatalogProgressSection } from './sections/CatalogProgressSection';
 import { SessionStreakSection } from './sections/SessionStreakSection';
 import { QuickResumeSection } from './sections/QuickResumeSection';
+import { QuickStartQueueSection } from './sections/QuickStartQueueSection';
 import { FavoriteGenreSpotlightSection } from './sections/FavoriteGenreSpotlightSection';
 import { WeeklyMomentumSection } from './sections/WeeklyMomentumSection';
 import { BestScoreSpotlightSection } from './sections/BestScoreSpotlightSection';
@@ -42,6 +43,7 @@ function HomePageComponent() {
         <AchievementsHub />
         <ProfileLevelCard />
         <QuickResumeSection />
+        <QuickStartQueueSection />
         <FavoriteGenreSpotlightSection />
         <WeeklyMomentumSection />
         <BestScoreSpotlightSection />
