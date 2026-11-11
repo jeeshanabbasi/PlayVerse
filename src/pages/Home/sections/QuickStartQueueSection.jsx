@@ -5,15 +5,20 @@ import { useQuickPlay } from '@context/index';
 import { gamesCatalog } from '@data/games';
 import { getStoredItem, getStoredJson } from '@utils/index';
 
+function readNonNegativeNumber(key) {
+  const value = Number(getStoredItem(key) || 0);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
+
 function buildQueue() {
   const history = getStoredJson('playverse_history', []);
   const recentIds = Array.isArray(history) ? history.filter(Boolean) : [];
 
   const games = gamesCatalog
     .map((game) => {
-      const playCount = Number(getStoredItem(`playverse.game.${game.id}.playCount`) || 0);
-      const highScore = Number(getStoredItem(`playverse.game.${game.id}.highScore`) || 0);
-      const lastPlayed = Number(getStoredItem(`playverse.game.${game.id}.lastPlayed`) || 0);
+      const playCount = readNonNegativeNumber(`playverse.game.${game.id}.playCount`);
+      const highScore = readNonNegativeNumber(`playverse.game.${game.id}.highScore`);
+      const lastPlayed = readNonNegativeNumber(`playverse.game.${game.id}.lastPlayed`);
       const recentIndex = recentIds.indexOf(game.id);
 
       return {
@@ -25,15 +30,20 @@ function buildQueue() {
       };
     })
     .sort((a, b) => {
-      if (a.playCount === 0 && b.playCount > 0) return -1;
-      if (a.playCount > 0 && b.playCount === 0) return 1;
-      if (a.recentIndex !== b.recentIndex) return a.recentIndex - b.recentIndex;
-      if (a.highScore !== b.highScore) return b.highScore - a.highScore;
+      const rank = (game) =>
+        game.recentIndex !== Number.MAX_SAFE_INTEGER ? 0 : game.playCount === 0 ? 1 : 2;
+      const rankDifference = rank(a) - rank(b);
+      if (rankDifference !== 0) return rankDifference;
+      if (rank(a) === 0 && a.recentIndex !== b.recentIndex) {
+        return a.recentIndex - b.recentIndex;
+      }
+      if (rank(a) === 1 && a.plays !== b.plays) return b.plays - a.plays;
       if (a.lastPlayed !== b.lastPlayed) return b.lastPlayed - a.lastPlayed;
+      if (a.highScore !== b.highScore) return b.highScore - a.highScore;
       return a.title.localeCompare(b.title);
     });
 
-  return [...new Map(games.map((game) => [game.id, game])).values()].slice(0, 3);
+  return games.slice(0, 3);
 }
 
 export const QuickStartQueueSection = memo(function QuickStartQueueSection() {
