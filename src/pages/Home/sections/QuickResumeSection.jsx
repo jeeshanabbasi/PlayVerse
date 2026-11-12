@@ -3,10 +3,16 @@ import { motion } from 'framer-motion';
 import { Play, Trophy } from 'lucide-react';
 import { useQuickPlay } from '@context/index';
 import { gamesCatalog } from '@data/games';
+import { getStoredItem, getStoredJson } from '@utils/index';
+
+function readNonNegativeNumber(key) {
+  const value = Number(getStoredItem(key) || 0);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
 
 function getQuickResume() {
   try {
-    const history = JSON.parse(localStorage.getItem('playverse_history') || '[]');
+    const history = getStoredJson('playverse_history', []);
     const lastSlug = Array.isArray(history) ? history[0] : null;
 
     if (!lastSlug) {
@@ -18,8 +24,8 @@ function getQuickResume() {
       return null;
     }
 
-    const highScore = Number(localStorage.getItem(`playverse.game.${game.id}.highScore`) || 0);
-    const playCount = Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0);
+    const highScore = readNonNegativeNumber(`playverse.game.${game.id}.highScore`);
+    const playCount = readNonNegativeNumber(`playverse.game.${game.id}.playCount`);
 
     return { ...game, highScore, playCount };
   } catch {

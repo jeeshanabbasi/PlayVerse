@@ -1,24 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { playUiClick } from '@utils/index';
+import { getStoredJson, playUiClick, setStoredItem } from '@utils/index';
+
+function readFavorites() {
+  const list = getStoredJson('playverse_favorites', []);
+  return Array.isArray(list) ? list.filter(Boolean) : [];
+}
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      const raw = localStorage.getItem('playverse_favorites');
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [favorites, setFavorites] = useState(() => readFavorites());
 
   useEffect(() => {
     const handleUpdate = () => {
-      try {
-        const raw = localStorage.getItem('playverse_favorites');
-        setFavorites(raw ? JSON.parse(raw) : []);
-      } catch {
-        setFavorites([]);
-      }
+      setFavorites(readFavorites());
     };
     window.addEventListener('playverse_favorites_updated', handleUpdate);
     return () => window.removeEventListener('playverse_favorites_updated', handleUpdate);
@@ -36,24 +29,15 @@ export function useFavorites() {
         e.stopPropagation();
       }
       playUiClick();
-      try {
-        const raw = localStorage.getItem('playverse_favorites');
-        let current = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(current)) current = [];
 
-        let next;
-        if (current.includes(slug)) {
-          next = current.filter((id) => id !== slug);
-        } else {
-          next = [...current, slug];
-        }
+      const current = readFavorites();
+      const next = current.includes(slug)
+        ? current.filter((id) => id !== slug)
+        : [...current, slug];
 
-        localStorage.setItem('playverse_favorites', JSON.stringify(next));
-        setFavorites(next);
-        window.dispatchEvent(new Event('playverse_favorites_updated'));
-      } catch {
-        // fail silently
-      }
+      setStoredItem('playverse_favorites', JSON.stringify(next));
+      setFavorites(next);
+      window.dispatchEvent(new Event('playverse_favorites_updated'));
     },
     []
   );

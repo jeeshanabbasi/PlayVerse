@@ -2,8 +2,13 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { GAME_GENRES, gamesCatalog } from '@data/games';
-import { cn, playUiTick, playUiClick } from '@utils/index';
+import { cn, getStoredItem, playUiTick, playUiClick } from '@utils/index';
 import { useFavorites } from '@hooks/index';
+
+function readNonNegativeNumber(key) {
+  const value = Number(getStoredItem(key) || 0);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
 
 export const GamesFilters = memo(function GamesFilters({
   genre = 'all',
@@ -16,17 +21,17 @@ export const GamesFilters = memo(function GamesFilters({
     {
       label: 'Not Played',
       value: 'unplayed',
-      count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) === 0).length,
+      count: gamesCatalog.filter((game) => readNonNegativeNumber(`playverse.game.${game.id}.playCount`) === 0).length,
     },
     {
       label: 'Played',
       value: 'played',
-      count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0) > 0).length,
+      count: gamesCatalog.filter((game) => readNonNegativeNumber(`playverse.game.${game.id}.playCount`) > 0).length,
     },
     {
       label: 'Has Record',
       value: 'recorded',
-      count: gamesCatalog.filter((game) => Number(localStorage.getItem(`playverse.game.${game.id}.highScore`) || 0) > 0).length,
+      count: gamesCatalog.filter((game) => readNonNegativeNumber(`playverse.game.${game.id}.highScore`) > 0).length,
     },
     { label: 'Favorites', value: 'favorites', count: favorites.length, isFav: true },
     ...GAME_GENRES.filter((g) => g.toLowerCase() !== 'all').map((g) => {

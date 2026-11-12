@@ -4,16 +4,16 @@ import { Section } from '@components/layout';
 import { GameCard } from '@game';
 import { gamesCatalog } from '@data/games';
 import { useToast } from '@hooks/index';
-import { staggerContainer, staggerItem } from '@utils/index';
+import { getStoredItem, getStoredJson, staggerContainer, staggerItem } from '@utils/index';
+
+function readNonNegativeNumber(key) {
+  const value = Number(getStoredItem(key) || 0);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
 
 function getStoredArray(key, fallback = []) {
-  try {
-    const raw = localStorage.getItem(key);
-    const parsed = raw ? JSON.parse(raw) : fallback;
-    return Array.isArray(parsed) ? parsed : fallback;
-  } catch {
-    return fallback;
-  }
+  const parsed = getStoredJson(key, fallback);
+  return Array.isArray(parsed) ? parsed : fallback;
 }
 
 function getSmartRecommendations() {
@@ -50,7 +50,7 @@ function getSmartRecommendations() {
         reason = 'Saved in your favorites';
       }
 
-      const playCount = Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0);
+      const playCount = readNonNegativeNumber(`playverse.game.${game.id}.playCount`);
       if (playCount > 0) {
         score += Math.min(5, playCount);
       }

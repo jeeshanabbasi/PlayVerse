@@ -3,10 +3,16 @@ import { motion } from 'framer-motion';
 import { Dice5, Play } from 'lucide-react';
 import { useQuickPlay } from '@context/index';
 import { gamesCatalog } from '@data/games';
+import { getStoredItem } from '@utils/index';
+
+function readNonNegativeNumber(key) {
+  const value = Number(getStoredItem(key) || 0);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
 
 function getLuckyPick() {
   const played = gamesCatalog.filter((game) => {
-    const count = Number(localStorage.getItem(`playverse.game.${game.id}.playCount`) || 0);
+    const count = readNonNegativeNumber(`playverse.game.${game.id}.playCount`);
     return count > 0;
   });
 
