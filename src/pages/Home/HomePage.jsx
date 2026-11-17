@@ -21,6 +21,7 @@ import { ArcadeMomentumSection } from './sections/ArcadeMomentumSection';
 import { HighScoreLadderSection } from './sections/HighScoreLadderSection';
 import { XPGoalSection } from './sections/XPGoalSection';
 import { StreakBoostSection } from './sections/StreakBoostSection';
+import { NightModeBoostSection } from './sections/NightModeBoostSection';
 import { FavoriteGenreSpotlightSection } from './sections/FavoriteGenreSpotlightSection';
 import { WeeklyMomentumSection } from './sections/WeeklyMomentumSection';
 import { BestScoreSpotlightSection } from './sections/BestScoreSpotlightSection';
@@ -52,6 +53,7 @@ function HomePageComponent() {
         <HighScoreLadderSection />
         <XPGoalSection />
         <StreakBoostSection />
+        <NightModeBoostSection />
         <FavoriteGenreSpotlightSection />
         <WeeklyMomentumSection />
         <BestScoreSpotlightSection />
