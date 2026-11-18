@@ -10,4 +10,5 @@ export { ArcadeScreensaver } from './Screensaver/ArcadeScreensaver';
 export { CyberWarpOverlay } from './WarpTunnel/CyberWarpOverlay';
 export { TrophyCelebrationModal } from './TrophyCelebration/TrophyCelebrationModal';
 export { QuickRollDock } from './QuickRollDock/QuickRollDock';
+export { ShortcutGuideModal } from './ShortcutGuide/ShortcutGuideModal';
 export { NotificationCenter } from './NotificationCenter/NotificationCenter';

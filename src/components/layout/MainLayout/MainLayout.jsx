@@ -8,7 +8,7 @@ import { NAV_ITEMS } from '@constants/navigation';
 import { Footer } from '@components/layout/Footer';
 import { SettingsDrawer } from '@components/layout/Header/SettingsDrawer';
 import { QuickPlayProvider, useToast } from '@context/index';
-import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal, QuickRollDock } from '@components/common';
+import { CommandPalette, SurpriseMeModal, ArcadeScreensaver, TrophyCelebrationModal, QuickRollDock, ShortcutGuideModal } from '@components/common';
 import { useKonamiCode } from '@hooks/index';
 import { getStoredItem, setStoredItem } from '@utils/index';
 
@@ -17,6 +17,7 @@ export function MainLayout() {
   const outlet = useOutlet();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [surpriseMeOpen, setSurpriseMeOpen] = useState(false);
+  const [shortcutGuideOpen, setShortcutGuideOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const { addToast } = useToast();
 
@@ -34,6 +35,17 @@ export function MainLayout() {
     updateScrollTopVisibility();
     window.addEventListener('scroll', updateScrollTopVisibility, { passive: true });
     return () => window.removeEventListener('scroll', updateScrollTopVisibility);
+  }, []);
+
+  useEffect(() => {
+    const handleShortcutGuide = (event) => {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+      if (event.key === '?') setShortcutGuideOpen(true);
+    };
+
+    window.addEventListener('keydown', handleShortcutGuide);
+    return () => window.removeEventListener('keydown', handleShortcutGuide);
   }, []);
 
   useKonamiCode(() => {
@@ -103,6 +115,10 @@ export function MainLayout() {
 
         <ArcadeScreensaver />
         <TrophyCelebrationModal />
+        <ShortcutGuideModal
+          isOpen={shortcutGuideOpen}
+          onClose={() => setShortcutGuideOpen(false)}
+        />
         <QuickRollDock />
         {showScrollTop && (
           <motion.button
