@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad, Sparkles, Download, HeartOff } from 'lucide-react';
+import { X, Volume2, VolumeX, Tv, Trash2, ShieldAlert, User, Palette, Gamepad, Sparkles, Download, HeartOff, Rows3 } from 'lucide-react';
 import {
   cn,
   getStoredItem,
@@ -51,9 +51,17 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     return getStoredItem('playverse_screensaver_enabled') !== 'false';
   });
 
+  const [compactDensity, setCompactDensity] = useState(() => {
+    return getStoredItem('playverse_compact_density') === 'true';
+  });
+
   useEffect(() => {
     document.documentElement.setAttribute('data-accent-theme', accentTheme);
   }, [accentTheme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-density', compactDensity ? 'compact' : 'comfortable');
+  }, [compactDensity]);
 
   const handleThemeChange = (theme) => {
     playUiClick();
@@ -74,6 +82,13 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
     const next = !screensaverEnabled;
     setScreensaverEnabled(next);
     setStoredItem('playverse_screensaver_enabled', next ? 'true' : 'false');
+  };
+
+  const handleToggleDensity = () => {
+    playUiClick();
+    const next = !compactDensity;
+    setCompactDensity(next);
+    setStoredItem('playverse_compact_density', next ? 'true' : 'false');
   };
 
   // Save profile edits in local storage and dispatch update event
@@ -339,6 +354,28 @@ function SettingsDrawerComponent({ isOpen, onClose }) {
                       type="checkbox"
                       checked={screensaverEnabled}
                       onChange={handleToggleScreensaver}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-border rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
+                  </label>
+                </div>
+
+                {/* Content Density */}
+                <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/80 bg-surface/50">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent border border-accent/25">
+                      <Rows3 className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-text">Compact Layout</p>
+                      <p className="text-[11px] text-text-secondary">Fit more content on screen.</p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={compactDensity}
+                      onChange={handleToggleDensity}
                       className="sr-only peer"
                     />
                     <div className="w-9 h-5 bg-border rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />

@@ -282,6 +282,18 @@
   }
 }
 
+[data-density="compact"] .container-app {
+  padding-inline: 0.75rem;
+}
+
+[data-density="compact"] .rounded-2xl {
+  border-radius: 0.75rem;
+}
+
+[data-density="compact"] {
+  --compact-gap: 0.75rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

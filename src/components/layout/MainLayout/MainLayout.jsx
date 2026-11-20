@@ -23,7 +23,9 @@ export function MainLayout() {
 
   useEffect(() => {
     const storedTheme = getStoredItem('playverse_accent_theme') || 'purple';
+    const compactDensity = getStoredItem('playverse_compact_density') === 'true';
     document.documentElement.setAttribute('data-accent-theme', storedTheme);
+    document.documentElement.setAttribute('data-density', compactDensity ? 'compact' : 'comfortable');
 
     const handleOpenSurpriseMe = () => setSurpriseMeOpen(true);
     window.addEventListener('playverse_open_surprise_me', handleOpenSurpriseMe);
