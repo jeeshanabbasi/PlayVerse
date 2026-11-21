@@ -32,6 +32,34 @@ function readFavoritesCount() {
   }
 }
 
+function getDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayStatus() {
+  try {
+    const history = JSON.parse(localStorage.getItem('playverse_daily_history') || '[]');
+    if (!Array.isArray(history)) return { active: false, sessions: 0 };
+
+    const today = getDateKey(new Date());
+    const todayEntry = history.find((item) => (item?.date || item) === today);
+
+    if (!todayEntry) return { active: false, sessions: 0 };
+
+    return {
+      active: true,
+      sessions: typeof todayEntry?.sessions === 'number'
+        ? todayEntry.sessions
+        : 1,
+    };
+  } catch {
+    return { active: false, sessions: 0 };
+  }
+}
+
 function getPlayerStats() {
   let sessions = 0;
   let achievements = 0;
@@ -47,8 +75,10 @@ function getPlayerStats() {
   });
 
   const totalXp = sessions * XP_PER_SESSION + achievements * XP_PER_ACHIEVEMENT;
+  const today = getTodayStatus();
   return {
     sessions,
+    today,
     level: Math.floor(totalXp / XP_PER_LEVEL) + 1,
     favorites: readFavoritesCount(),
   };
@@ -114,7 +144,7 @@ export function ProfileMenu({ onSettingsClick }) {
             </div>
 
             <div className="my-3 grid grid-cols-3 divide-x divide-border rounded-xl border border-border bg-background/30 py-2">
-              <Stat label="Sessions" value={stats.sessions} />
+              <Stat label="Today" value={stats.today.sessions} />
               <Stat label="Favorites" value={stats.favorites} />
               <Stat label="Level" value={stats.level} />
             </div>
