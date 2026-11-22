@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { History, Menu, Moon, Play, Sun, X, Settings, Trash2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '@components/layout/Logo';
@@ -14,9 +14,27 @@ export function Header({ onSettingsClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentGames, setRecentGames] = useState([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const { isDark, toggleTheme } = useTheme();
   const { openGame } = useQuickPlay();
   const closeMobile = () => setMobileOpen(false);
+
+  useEffect(() => {
+    const updateScrollProgress = () => {
+      const scrollTop = window.scrollY;
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
+      setScrollProgress(Math.min(100, Math.max(0, progress)));
+    };
+
+    updateScrollProgress();
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress);
+    return () => {
+      window.removeEventListener('scroll', updateScrollProgress);
+      window.removeEventListener('resize', updateScrollProgress);
+    };
+  }, []);
 
   const toggleHistory = () => {
     playUiClick();
@@ -44,6 +62,16 @@ export function Header({ onSettingsClick }) {
 
   return (
     <header className="relative sticky top-0 z-[200] w-full border-b border-border bg-background/80 backdrop-blur-xl">
+      <div
+        className="absolute bottom-0 left-0 h-0.5 bg-primary transition-[width] duration-150"
+        style={{ width: `${scrollProgress}%` }}
+        role="progressbar"
+        aria-label="Page scroll progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow={Math.round(scrollProgress)}
+      />
+
       <div className="container-app">
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           <Logo />
