@@ -48,6 +48,13 @@ function GamesPageComponent() {
             />
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <span
+              className="rounded-lg border border-border bg-surface px-2.5 py-2 text-xs font-semibold tabular-nums text-text-secondary"
+              role="status"
+              aria-live="polite"
+            >
+              {matching} of {total}
+            </span>
             <label className="flex items-center gap-2 text-sm text-text-secondary">
               Difficulty
               <select
