@@ -1,9 +1,10 @@
 import { memo, useCallback, useState } from 'react';
-import { Gamepad2 } from 'lucide-react';
+import { Gamepad2, Play, Trophy } from 'lucide-react';
 import { GameCard } from '@game';
 import { EmptyState, Skeleton, Button } from '@ui';
 import { useToast } from '@hooks/index';
-import { cn } from '@utils/index';
+import { cn, getStoredItem, playUiClick } from '@utils/index';
+import { useQuickPlay } from '@context/index';
 
 const MemoGameCard = memo(GameCard);
 
@@ -23,11 +24,13 @@ function GamesGridSkeleton({ count = 10 }) {
 
 export const GamesGrid = memo(function GamesGrid({
   games,
+  viewMode = 'grid',
   isLoading,
   hasActiveFilters,
   onClearFilters,
 }) {
   const { success } = useToast();
+  const { openGame } = useQuickPlay();
   const [wishlist, setWishlist] = useState({});
   const [favorites, setFavorites] = useState({});
 
@@ -58,6 +61,51 @@ export const GamesGrid = memo(function GamesGrid({
           ) : null
         }
       />
+    );
+  }
+
+  if (viewMode === 'list') {
+    return (
+      <div className="space-y-2" role="list" aria-label="Games catalog">
+        {games.map((game) => {
+          const rawBest = getStoredItem(`playverse.game.${game.id}.highScore`);
+          const best = Number(rawBest || 0);
+
+          return (
+            <div
+              key={game.id}
+              role="listitem"
+              className="grid grid-cols-[5rem_1fr_auto] items-center gap-3 rounded-xl border border-border bg-surface p-2.5 transition hover:border-primary/30 md:grid-cols-[7rem_1fr_10rem_auto]"
+            >
+              <img
+                src={game.image}
+                alt=""
+                loading="lazy"
+                className="aspect-[16/10] w-full rounded-lg object-cover"
+              />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-text">{game.title}</p>
+                <p className="mt-0.5 truncate text-xs text-text-muted">{game.genres.join(' · ')}</p>
+              </div>
+              <div className="hidden items-center gap-1.5 text-xs text-warning md:flex">
+                <Trophy className="h-3.5 w-3.5" aria-hidden="true" />
+                {Number.isFinite(best) && best > 0 ? best.toLocaleString() : 'No record'}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  playUiClick();
+                  openGame(game.id);
+                }}
+                className="btn-primary px-3 py-2 text-xs"
+              >
+                <Play className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
+                <span className="hidden sm:inline">Play</span>
+              </button>
+            </div>
+          );
+        })}
+      </div>
     );
   }
 

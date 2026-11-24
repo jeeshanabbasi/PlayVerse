@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw } from 'lucide-react';
+import { LayoutGrid, List, RotateCcw } from 'lucide-react';
 import { Container } from '@components/layout';
 import { pageFade } from '@utils/index';
 import { useGamesExplorer } from '@hooks/index';
@@ -8,6 +8,22 @@ import { GAME_DIFFICULTIES } from '@data/games';
 import { GamesHero, GamesFilters, GamesGrid, DailyArcadePick, RecentlyPlayedRow } from './sections';
 
 function GamesPageComponent() {
+  const [viewMode, setViewMode] = useState(() => {
+    try {
+      return localStorage.getItem('playverse_games_view') === 'list' ? 'list' : 'grid';
+    } catch {
+      return 'grid';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('playverse_games_view', viewMode);
+    } catch {
+      // View preference is optional when storage is unavailable.
+    }
+  }, [viewMode]);
+
   const {
     query,
     setQuery,
@@ -48,6 +64,26 @@ function GamesPageComponent() {
             />
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <div className="flex rounded-xl border border-border bg-surface p-1" role="group" aria-label="Catalog view">
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${viewMode === 'grid' ? 'bg-primary/15 text-primary' : 'text-text-muted hover:text-text'}`}
+                aria-label="Grid view"
+                aria-pressed={viewMode === 'grid'}
+              >
+                <LayoutGrid className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${viewMode === 'list' ? 'bg-primary/15 text-primary' : 'text-text-muted hover:text-text'}`}
+                aria-label="List view"
+                aria-pressed={viewMode === 'list'}
+              >
+                <List className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
             <span
               className="rounded-lg border border-border bg-surface px-2.5 py-2 text-xs font-semibold tabular-nums text-text-secondary"
               role="status"
@@ -105,6 +141,7 @@ function GamesPageComponent() {
         <div className="pt-2 md:pt-4">
           <GamesGrid
             games={results}
+            viewMode={viewMode}
             isLoading={isLoading}
             hasActiveFilters={hasActiveFilters}
             onClearFilters={clearFilters}
