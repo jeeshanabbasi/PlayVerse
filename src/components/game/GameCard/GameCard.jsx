@@ -2,18 +2,19 @@ import { memo, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Info, Heart, Trophy } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { cn, playUiTick, playUiClick } from '@utils/index';
+import { cn, getStoredItem, playUiTick, playUiClick } from '@utils/index';
 import { useQuickPlay } from '@context/index';
 import { useFavorites } from '@hooks/index';
 import { CopyButton } from './CopyButton';
 
 function getPersonalBest(gameId) {
-  try {
-    const score = Number(localStorage.getItem(`playverse.game.${gameId}.highScore`) || 0);
-    return Number.isFinite(score) ? score : 0;
-  } catch {
-    return 0;
-  }
+  const score = Number(getStoredItem(`playverse.game.${gameId}.highScore`) || 0);
+  return Number.isFinite(score) ? Math.max(0, score) : 0;
+}
+
+function getPlayCount(gameId) {
+  const count = Number(getStoredItem(`playverse.game.${gameId}.playCount`) || 0);
+  return Number.isFinite(count) ? Math.max(0, count) : 0;
 }
 
 function GameCardComponent({
@@ -28,14 +29,22 @@ function GameCardComponent({
   const cardRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [personalBest, setPersonalBest] = useState(() => getPersonalBest(id));
+  const [playCount, setPlayCount] = useState(() => getPlayCount(id));
   const [tilt, setTilt] = useState({ rx: 0, ry: 0, shineX: 50, shineY: 50, active: false });
   const { openGame } = useQuickPlay();
   const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
-    const refreshPersonalBest = () => setPersonalBest(getPersonalBest(slug));
-    window.addEventListener('playverse_stats_updated', refreshPersonalBest);
-    return () => window.removeEventListener('playverse_stats_updated', refreshPersonalBest);
+    const refreshStats = () => {
+      setPersonalBest(getPersonalBest(slug));
+      setPlayCount(getPlayCount(slug));
+    };
+    window.addEventListener('playverse_stats_updated', refreshStats);
+    window.addEventListener('storage', refreshStats);
+    return () => {
+      window.removeEventListener('playverse_stats_updated', refreshStats);
+      window.removeEventListener('storage', refreshStats);
+    };
   }, [slug]);
 
   const handleMouseMove = (e) => {
@@ -166,9 +175,17 @@ function GameCardComponent({
         {/* Card Details */}
         <div className="flex flex-col flex-1 p-4 gap-3">
           <div className="min-w-0">
-            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Browser Ready
+            <div className="mb-2 flex flex-wrap gap-1.5">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                Browser Ready
+              </div>
+              {playCount > 0 && (
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-success/25 bg-success/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-success">
+                  <Play className="h-2.5 w-2.5 fill-current" aria-hidden="true" />
+                  Played {playCount}×
+                </div>
+              )}
             </div>
             <h3 className="text-heading-md text-text truncate group-hover:text-primary transition-colors">
               {title}
