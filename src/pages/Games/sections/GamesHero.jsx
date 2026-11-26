@@ -70,6 +70,7 @@ export const GamesHero = memo(function GamesHero({
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               onClear={onClear}
+              shortcut="/"
               inputClassName="bg-surface/80 border-border shadow-[var(--shadow-soft)] focus:border-primary"
             />
           </div>
@@ -95,9 +96,7 @@ export const GamesHero = memo(function GamesHero({
               <strong className="text-text-secondary font-medium">{total}</strong> games
             </span>
           </p>
-          <p className="flex items-center gap-1.5 text-xs text-text-muted">
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">/</kbd> search
-            <span aria-hidden="true">·</span>
+          <p className="hidden items-center gap-1.5 text-xs text-text-muted sm:flex">
             <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] text-text-secondary">Esc</kbd> clear
           </p>
         </div>

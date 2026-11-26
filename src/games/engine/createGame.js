@@ -13,10 +13,13 @@ export async function createGameEngine({
   audio = {},
   onEvent,
 } = {}) {
-  if (!parent) {
-    throw new Error('createGameEngine requires a parent element');
+  if (!(parent instanceof Element)) {
+    throw new Error('createGameEngine requires a valid parent element');
   }
-  parent.innerHTML = '';
+  if (!parent.isConnected) {
+    throw new Error('createGameEngine parent is not attached to the document');
+  }
+  parent.replaceChildren();
   if (!definition) {
     throw new Error('createGameEngine requires a game definition');
   }

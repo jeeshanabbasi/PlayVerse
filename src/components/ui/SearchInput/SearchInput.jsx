@@ -17,6 +17,7 @@ export const SearchInput = forwardRef(function SearchInput(
     onClear,
     error,
     hint,
+    shortcut,
     id,
     size = 'md',
     placeholder = 'Search…',
@@ -79,6 +80,12 @@ export const SearchInput = forwardRef(function SearchInput(
           )}
           {...props}
         />
+
+        {shortcut && !hasValue && !disabled && (
+          <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md border border-border bg-background/80 px-2 py-1 font-mono text-[10px] font-semibold text-text-muted">
+            {shortcut}
+          </kbd>
+        )}
 
         {hasValue && !disabled && (
           <button

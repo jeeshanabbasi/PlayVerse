@@ -138,7 +138,7 @@ export function Footer() {
               <a
                 href="https://github.com"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 onClick={playUiClick}
                 onMouseEnter={playUiTick}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-primary/45 hover:shadow-[var(--shadow-glow)] transition-all duration-250 cursor-pointer"
@@ -149,7 +149,7 @@ export function Footer() {
               <a
                 href="https://twitter.com"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 onClick={playUiClick}
                 onMouseEnter={playUiTick}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-primary/45 hover:shadow-[var(--shadow-glow)] transition-all duration-250 cursor-pointer"
@@ -160,7 +160,7 @@ export function Footer() {
               <a
                 href="https://playverse.com"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 onClick={playUiClick}
                 onMouseEnter={playUiTick}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface text-text-secondary hover:text-text hover:border-primary/45 hover:shadow-[var(--shadow-glow)] transition-all duration-250 cursor-pointer"
