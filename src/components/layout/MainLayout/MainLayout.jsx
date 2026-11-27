@@ -33,6 +33,29 @@ export function MainLayout() {
   }, []);
 
   useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      if (location.hash) {
+        const target = document.querySelector(location.hash);
+        if (target) {
+          target.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start',
+          });
+          return;
+        }
+      }
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto',
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
     const updateScrollTopVisibility = () => setShowScrollTop(window.scrollY > 400);
     updateScrollTopVisibility();
     window.addEventListener('scroll', updateScrollTopVisibility, { passive: true });
